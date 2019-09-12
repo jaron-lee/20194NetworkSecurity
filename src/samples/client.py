@@ -22,6 +22,9 @@ def main():
         time.sleep(.25)
         print(data)
         s.send("Jaron Lee".encode())
+        data = s.recv(1024).decode()
+        print(data)
+
 
         for message in messages:
             send_recv_instruction(s, message)
