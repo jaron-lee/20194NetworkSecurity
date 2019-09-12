@@ -9,8 +9,8 @@ def send_recv_instruction(s, message):
     print(data.decode())
 
 def main():
-    HOST = ""
-    PORT = 50006
+    HOST = "192.168.200.52"
+    PORT = 19002
     messages = ["look mirror", 
             "get hairpin", 
             "unlock door with hairpin",
@@ -27,5 +27,5 @@ def main():
 
 
 if __name__ == "__main__":
-            
+    main()
 
