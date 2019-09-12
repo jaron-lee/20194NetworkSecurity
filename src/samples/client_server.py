@@ -48,7 +48,7 @@ def main():
         while game.status == "playing":
             
             data = get_data(s)
-            lines = data_as_string.split("\n")
+            lines = data.split("\n")
             for line in lines:
                 output = game.command(line)
 
