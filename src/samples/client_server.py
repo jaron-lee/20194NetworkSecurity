@@ -49,9 +49,9 @@ def main():
             
             data = get_data(s)
             lines = data.split("\n")
-            print(lines)
             for line in lines:
                 if len(line) > 0:
+                    print(line)
                     output = game.command(line)
 
 if __name__ == "__main__":
