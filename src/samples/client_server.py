@@ -51,8 +51,9 @@ def main():
             lines = data.split("\n")
             for line in lines:
                 if len(line) > 0:
-                    print(line)
-                    output = game.command(line)
+                    final = line.split("<EOL>")[0]
+                    print(final)
+                    output = game.command(final)
 
 if __name__ == "__main__":
     main()
