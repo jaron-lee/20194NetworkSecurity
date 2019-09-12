@@ -41,7 +41,7 @@ def main():
         time.sleep(0.25)
         print("Finish Client Test")
 
-        game = EscapeRoomGame(output=functools.partial(write_function, conn=conn))
+        game = EscapeRoomGame(output=functools.partial(write_function, conn=s))
         game.create_game()
         game.start()
         print("Start Game")
