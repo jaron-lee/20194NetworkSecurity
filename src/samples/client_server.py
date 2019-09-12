@@ -37,6 +37,8 @@ def main():
         for message in messages:
             send_recv_instruction(s, message)
 
+        time.sleep(0.25)
+
         get_data(s)
         game = EscapeRoomGame(output=functools.partial(write_function, conn=conn))
         game.create_game()
