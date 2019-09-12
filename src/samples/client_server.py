@@ -37,13 +37,17 @@ def main():
         for message in messages:
             send_recv_instruction(s, message)
 
+        
         time.sleep(0.25)
+        print("Finish Client Test")
 
         get_data(s)
         game = EscapeRoomGame(output=functools.partial(write_function, conn=conn))
         game.create_game()
         game.start()
+        print("Start Game")
         while game.status == "playing":
+            
             data = get_data(s)
             lines = data_as_string.split("\n")
             for line in lines:
