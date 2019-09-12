@@ -6,12 +6,10 @@ import functools
 def write_function(string, conn):
     conn.send(string.encode())
 
-def send_recv_instruction(s, message):
+def send(s, message):
     message = message + "\n"
     s.send(message.encode())
-    time.sleep(0.25)
-    data = s.recv(1024)
-    print(data.decode())
+
 
 def get_data(s):
     data = s.recv(1024).decode()
@@ -35,13 +33,14 @@ def main():
 
 
         for message in messages:
-            send_recv_instruction(s, message)
+            send(s, message)
+            time.sleep(.25)
+            get_data(s)
 
         
         time.sleep(0.25)
         print("Finish Client Test")
 
-        get_data(s)
         game = EscapeRoomGame(output=functools.partial(write_function, conn=conn))
         game.create_game()
         game.start()
