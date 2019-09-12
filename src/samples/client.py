@@ -19,8 +19,9 @@ def main():
         s.connect((HOST, PORT))
         print("Connected")
         data = s.recv(1024).decode()
-        if data == "What is your name?":
-            s.send("Jaron Lee".encode())
+        time.sleep(.25)
+        print(data)
+        s.send("Jaron Lee".encode())
 
         for message in messages:
             send_recv_instruction(s, message)
