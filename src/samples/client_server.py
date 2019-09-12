@@ -49,8 +49,10 @@ def main():
             
             data = get_data(s)
             lines = data.split("\n")
+            print(lines)
             for line in lines:
-                output = game.command(line)
+                if len(line) > 0:
+                    output = game.command(line)
 
 if __name__ == "__main__":
     main()
