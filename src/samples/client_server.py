@@ -52,9 +52,6 @@ def main():
             for line in lines:
                 output = game.command(line)
 
-            s.send(output.encode())
-
-
 if __name__ == "__main__":
     main()
 
