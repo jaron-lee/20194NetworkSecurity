@@ -1,4 +1,5 @@
 import asyncio
+import time
 import functools
 from escape_room_001 import *
 def write_function(string, conn):
@@ -26,6 +27,7 @@ class StudentServer(asyncio.Protocol):
 
     def data_received(self, data):
 
+        time.sleep(.2)
         text = data.decode()
         lines = text.split("<EOL>\n")
         if self.game.status == "playing":
