@@ -225,11 +225,12 @@ class EscapeRoomGame:
         chest  = EscapeRoomObject("chest",  visible=True, openable=True, open=False, keyed=True, locked=True, unlockers=[hairpin])
         room   = EscapeRoomObject("room",   visible=True)
         player = EscapeRoomObject("player", visible=False, alive=True)
+        hammer = EscapeRoomObject("hammer", visible=False, gettable=True)
 
         
         # setup containers
         player["container"]= {}
-        chest["container"] = {}
+        chest["container"] = create_container_contents(hammer) 
         room["container"]  = create_container_contents(player, door, clock, mirror, hairpin, chest)
         
         # set initial descriptions (functions)
@@ -244,6 +245,7 @@ class EscapeRoomGame:
         door.triggers.append(lambda obj, cmd, *args: (cmd == "open") and room["container"].__delitem__(player.name))
         room.triggers.append(lambda obj, cmd, *args: (cmd == "_post_command_") and advance_time(room, clock))
         # TODO, the chest needs some triggers. This is for a later exercise
+        chest.triggers.append(lambda obj, cmd, *args: (cmd== "open") and hammer.__setitem__("visible",True))
         
         self.room, self.player = room, player
         self.command_handler = self.command_handler_class(room, player, self.output)
