@@ -9,6 +9,9 @@ class StudentClient(asyncio.Protocol):
         #self.transport.write("Hello World".encode())
 
     def data_received(self, data):
+        text = data.decode()
+        if text == "SUBMIT autograde command:<EOL>":
+            self.transport.write("SUBMIT,Jaron Lee,jaron.lee@jhu.edu,9,1092")
          
         print(data.decode())
 

@@ -1,6 +1,6 @@
 import asyncio
 
-class EchoServer(asyncio.Protocol):
+class StudentServer(asyncio.Protocol):
     def __init__(self):
         pass
 
@@ -13,7 +13,7 @@ class EchoServer(asyncio.Protocol):
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    coro = loop.create_server(EchoServer,'',8080)
+    coro = loop.create_server(StudentServer,'',1092)
     server = loop.run_until_complete(coro)
 
     try:
