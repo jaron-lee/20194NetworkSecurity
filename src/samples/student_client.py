@@ -8,6 +8,7 @@ class StudentClient(asyncio.Protocol):
                             "look mirror", 
                             "get hairpin",
                             "unlock chest with hairpin",
+                            "open chest",
                             "get hammer from chest",
                             "unlock door with hairpin",
                             "open door"]
