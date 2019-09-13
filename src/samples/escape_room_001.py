@@ -226,12 +226,11 @@ class EscapeRoomGame:
         room   = EscapeRoomObject("room",   visible=True)
         player = EscapeRoomObject("player", visible=False, alive=True)
 
-        hammer = EscapeRoomObject("hammer", gettable=True, visible=True)
         
         # setup containers
         player["container"]= {}
         chest["container"] = {}
-        room["container"]  = create_container_contents(player, door, clock, mirror, hairpin, chest, hammer)
+        room["container"]  = create_container_contents(player, door, clock, mirror, hairpin, chest)
         
         # set initial descriptions (functions)
         room["description"]    = create_room_description(room)
