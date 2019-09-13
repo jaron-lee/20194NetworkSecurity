@@ -34,6 +34,7 @@ class StudentClient(asyncio.Protocol):
                 instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
                 print("Client: {}".format(instruction))
                 self.transport.write(instruction.encode())
+                self.instruction_counter += 1
             else:
                 print("RAN OUT OF INSTRUCTIONS!")
 
