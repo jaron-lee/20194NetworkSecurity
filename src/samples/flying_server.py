@@ -4,7 +4,7 @@ import functools
 from escape_room_001 import *
 
 def write_function(string, conn):
-    print(string)
+    print("SS: ", string)
     conn.write(string.encode())
 
 class StudentServer(asyncio.Protocol):
