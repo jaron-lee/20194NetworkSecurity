@@ -34,7 +34,7 @@ class StudentServer(asyncio.Protocol):
         if self.game.status == "playing":
             for line in lines:
                 if len(line) > 0:
-                    print(line)
+                    print("S: ", line)
                     self.game.command(line)
 
         
