@@ -44,10 +44,6 @@ class StudentClient(asyncio.Protocol):
             print("RAN OUT OF INSTRUCTIONS!")
 
 
-
-            
-
-            
          
 
 if __name__ == "__main__":
