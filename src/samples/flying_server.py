@@ -11,6 +11,8 @@ class StudentServer(asyncio.Protocol):
     def __init__(self):
         pass
 
+    async def wait_agents(self):
+        await asyncio.wait([asyncio.ensure_future(a) for a in self.game.agents])
 
     def connection_made(self, transport):
         print("S: connection made")
@@ -20,8 +22,8 @@ class StudentServer(asyncio.Protocol):
         game.create_game()
         game.start()
         self.game = game
+        asyncio.ensure_future(self.wait_agents())
 
-        await asyncio.wait([asyncio.ensure_future(a) for a in self.game.agents])
     def connection_lost(self, ex):
         print("S: closing transport")
         self.transport.close()
