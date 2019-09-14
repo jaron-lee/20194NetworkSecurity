@@ -29,7 +29,7 @@ class StudentClient(asyncio.Protocol):
         if text.startswith("SUBMIT: OK"):
             test_id = text.split(",")[1]
             print("Client: success, {}".format(test_id))
-        if self.instruction[self.instruction_counter] == "hit flyingkey with hammer":
+        if self.instructions[self.instruction_counter] == "hit flyingkey with hammer":
             if text.endswith("floor"):
                 instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
                 self.transport.write(instruction.encode())
