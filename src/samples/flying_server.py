@@ -2,6 +2,7 @@ import asyncio
 import time
 import functools
 from escape_room_001 import *
+
 def write_function(string, conn):
     print(string)
     conn.write(string.encode())
@@ -9,6 +10,7 @@ def write_function(string, conn):
 class StudentServer(asyncio.Protocol):
     def __init__(self):
         pass
+
 
     def connection_made(self, transport):
         print("S: connection made")
@@ -20,6 +22,9 @@ class StudentServer(asyncio.Protocol):
         self.game = game
 
         #await asyncio.wait([asyncio.ensure_future(a) for a in self.game.agents])
+    def connection_lost(self, ex):
+        print("S: closing transport")
+        self.transport.close()
 
     def data_received(self, data):
         text = data.decode()
