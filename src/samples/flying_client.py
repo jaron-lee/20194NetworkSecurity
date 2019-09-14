@@ -26,7 +26,7 @@ class StudentClient(asyncio.Protocol):
         if self.instruction_counter < len(self.instructions):
             if text == "SUBMIT autograde command:<EOL>\n":
                 print("Client: submit request")
-                self.transport.write("SUBMIT,Jaron Lee,jaron.lee@jhu.edu,9,1092".encode())
+                self.transport.write("SUBMIT,Jaron Lee,jaron.lee@jhu.edu,9,1093".encode())
             if text.startswith("SUBMIT: OK"):
                 test_id = text.split(",")[1]
                 print("Client: success, {}".format(test_id))
