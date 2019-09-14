@@ -30,7 +30,7 @@ class StudentClient(asyncio.Protocol):
             test_id = text.split(",")[1]
             print("Client: success, {}".format(test_id))
         if self.instructions[self.instruction_counter] == "hit flyingkey with hammer":
-            if text.endswith("floor"):
+            if text.endswith("wall"):
                 instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
                 self.transport.write(instruction.encode())
                 self.instruction_counter += 1
