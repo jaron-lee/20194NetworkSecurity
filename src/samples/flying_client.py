@@ -21,15 +21,15 @@ class StudentClient(asyncio.Protocol):
 
     def data_received(self, data):
         text = data.decode()
-        print(text)
+        print("CR: ", text)
         time.sleep(.2)
         if self.instruction_counter < len(self.instructions):
             if text == "SUBMIT autograde command:<EOL>\n":
-                print("Client: submit request")
+                print("C: submit request")
                 self.transport.write("SUBMIT,Jaron Lee,jaron.lee@jhu.edu,9,1093".encode())
             if text.startswith("SUBMIT: OK"):
                 test_id = text.split(",")[1]
-                print("Client: success, {}".format(test_id))
+                print("C: success, {}".format(test_id))
             if self.instructions[self.instruction_counter] == "hit flyingkey with hammer":
                 if text.split("<EOL>\n")[0].endswith("wall"):
                     instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
@@ -37,7 +37,7 @@ class StudentClient(asyncio.Protocol):
                     self.instruction_counter += 1
             else:
                 instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
-                print("Client: {}".format(instruction))
+                print("C: {}".format(instruction))
                 self.transport.write(instruction.encode())
                 self.instruction_counter += 1
         else:

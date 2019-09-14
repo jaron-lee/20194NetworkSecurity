@@ -11,7 +11,7 @@ class StudentServer(asyncio.Protocol):
         pass
 
     def connection_made(self, transport):
-        print("Server: connection made")
+        print("S: connection made")
         self.transport = transport
         #loop = asyncio.get_event_loop()
         game = EscapeRoomGame(output=functools.partial(write_function, conn=self.transport))
@@ -23,6 +23,7 @@ class StudentServer(asyncio.Protocol):
 
     def data_received(self, data):
         text = data.decode()
+        print("SR: ", text)
         #asyncio.sleep(.2)
         lines = text.split("<EOL>\n")
         if self.game.status == "playing":
