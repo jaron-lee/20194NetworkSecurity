@@ -1,7 +1,7 @@
 import asyncio
 import time
 import functools
-from escape_room_004 import *
+from escape_room_001 import *
 def write_function(string, conn):
     print(string)
     conn.write(string.encode())
