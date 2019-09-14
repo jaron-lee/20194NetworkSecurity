@@ -17,7 +17,7 @@ class StudentServer(asyncio.Protocol):
     def connection_made(self, transport):
         print("S: connection made")
         self.transport = transport
-        loop = asyncio.get_event_loop()
+        #loop = asyncio.get_event_loop()
         game = EscapeRoomGame(output=functools.partial(write_function, conn=self.transport))
         game.create_game()
         game.start()
