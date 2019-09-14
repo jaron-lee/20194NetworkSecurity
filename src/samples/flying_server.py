@@ -22,9 +22,8 @@ class StudentServer(asyncio.Protocol):
         await asyncio.wait([asyncio.ensure_future(a) for a in self.game.agents])
 
     def data_received(self, data):
-
-        time.sleep(.2)
         text = data.decode()
+        asyncio.sleep(.2)
         lines = text.split("<EOL>\n")
         if self.game.status == "playing":
             for line in lines:
