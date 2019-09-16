@@ -11,18 +11,19 @@ class StudentServer(asyncio.Protocol):
     def __init__(self):
         pass
 
-    async def wait_agents(self):
-        await asyncio.wait([asyncio.ensure_future(a) for a in self.game.agents])
+    #async def wait_agents(self):
+    #    await asyncio.wait([asyncio.create_task(a) for a in self.game.agents])
 
     def connection_made(self, transport):
         print("S: connection made")
         self.transport = transport
-        #loop = asyncio.get_event_loop()
         game = EscapeRoomGame(output=functools.partial(write_function, conn=self.transport))
         game.create_game()
         game.start()
         self.game = game
-        asyncio.ensure_future(self.wait_agents())
+        #asyncio.create_task(self.wait_agents())
+        for a in game.agents:
+            asyncio.ensure_future(a)
 
     def connection_lost(self, ex):
         print("S: closing transport")
@@ -38,9 +39,6 @@ class StudentServer(asyncio.Protocol):
                 if len(line) > 0:
                     print("S: ", line)
                     self.game.command(line)
-
-        
-        #self.transport.write(data)
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
