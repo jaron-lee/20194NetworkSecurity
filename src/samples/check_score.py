@@ -11,6 +11,7 @@ def partial(result):
         def connection_made(self, transport):
             self.transport = transport
             self.transport.write("<EOL>\n".encode())
+            print(self.result)
             #self.transport.write("Hello World".encode())
 
         def data_received(self, data):
@@ -20,6 +21,7 @@ def partial(result):
             if text == "SUBMIT autograde command:<EOL>\n":
                 print("C: submit request")
                 self.transport.write("RESULT,{}<EOL>\n".format(self.result).encode())
+
     return StudentClient
 
 
@@ -38,4 +40,3 @@ if __name__ == "__main__":
     client.close()
     loop.run_until_complete(client.close())
     loop.close()
-    main(sys.argv[1:])
