@@ -305,6 +305,8 @@ class EscapeRoomGame:
         door.triggers.append(lambda obj, cmd, *args: (cmd == "open") and room["container"].__delitem__(player.name))
         room.triggers.append(lambda obj, cmd, *args: (cmd == "_post_command_") and advance_time(room, clock))
         flyingkey.triggers.append((lambda obj, cmd, *args: (cmd == "hit" and args[0] in obj["smashers"]) and flyingkey_hit_trigger(room, flyingkey, key, self.output)))
+        chest.triggers.append(lambda obj, cmd, *args: (cmd == "open") and chest.__setitem__("description", create_chest_description(chest)))
+        chest.triggers.append(lambda obj, cmd, *args: (cmd == "unlock") and chest.__setitem__("description", create_chest_description(chest)))
         
         # TODO, the chest needs some triggers. Please make the chest
         # update it's description when it's unlocked and when it's opened.
