@@ -1,16 +1,41 @@
-import socket
+import playground
+import asyncio
 import sys
 
-def main(args):
-    #HOST = "192.168.200.52"
-    HOST = "20194.0.0.19000"
-    PORT = int(args[0])
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        data = s.recv(1024).decode()
-        s.send("RESULT,{}".format(args[1]).encode())
-        data = s.recv(1024).decode()
-        print(data)
+def partial(result):
+    class StudentClient(asyncio.Protocol):
+        def __init__(self):
+            self.result = result
+            pass
+
+        def connection_made(self, transport):
+            self.transport = transport
+            self.transport.write("<EOL>\n".encode())
+            #self.transport.write("Hello World".encode())
+
+        def data_received(self, data):
+            text = data.decode()
+            print("CR: ", text)
+            time.sleep(.2)
+            if text == "SUBMIT autograde command:<EOL>\n":
+                print("C: submit request")
+                self.transport.write("RESULT,{}<EOL>\n".format(self.result).encode())
+    return StudentClient
+
 
 if __name__ == "__main__":
+    result = sys.argv[1]
+    
+    loop = asyncio.get_event_loop()
+    coro = playground.create_connection(partial(result),'20194.0.0.19000',19005)
+    client = loop.run_until_complete(coro)
+
+    try:
+        loop.run_forever()
+    except KeyboardInterrupt:
+        pass
+
+    client.close()
+    loop.run_until_complete(client.close())
+    loop.close()
     main(sys.argv[1:])
