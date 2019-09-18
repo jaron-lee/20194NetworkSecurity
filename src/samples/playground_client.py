@@ -18,7 +18,7 @@ class StudentClient(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
-        self.transport.write("<EOL>\n")
+        self.transport.write("<EOL>\n".encode())
         #self.transport.write("Hello World".encode())
 
     def data_received(self, data):
