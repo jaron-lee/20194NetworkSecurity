@@ -3,7 +3,7 @@ import sys
 
 def main(args):
     HOST = "192.168.200.52"
-    PORT = args[0]
+    PORT = int(args[0])
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
         data = s.recv(1024).decode()
