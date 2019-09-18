@@ -8,6 +8,7 @@ class EchoClient(asyncio.Protocol):
     def connection_made(self, transport):
         self.transport = transport
         self.transport.write("<EOL>\n".encode())
+        print("C: connection made")
 
     def data_received(self, data):
         print(data.decode() + "sent")
@@ -15,7 +16,7 @@ class EchoClient(asyncio.Protocol):
 if __name__ == "__main__":
 
     loop = asyncio.get_event_loop()
-    coro = playground.create_connection(EchoClient,'20194.0.0.19000',9090)
+    coro = playground.create_connection(EchoClient,'20194.0.0.19000',19005)
     client = loop.run_until_complete(coro)
 
     try:
