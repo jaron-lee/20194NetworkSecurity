@@ -6,6 +6,7 @@ import playground
 
 def write_function(string, conn):
     print("SS: ", string)
+    string = string + "<EOL>\n"
     conn.write(string.encode())
 
 class StudentServer(asyncio.Protocol):
