@@ -2,6 +2,7 @@ import playground
 import asyncio
 import sys
 
+
 def partial(result):
     class StudentClient(asyncio.Protocol):
         def __init__(self):
@@ -17,7 +18,6 @@ def partial(result):
         def data_received(self, data):
             text = data.decode()
             print("CR: ", text)
-            time.sleep(.2)
             if text == "SUBMIT autograde command:<EOL>\n":
                 print("C: submit request")
                 self.transport.write("RESULT,{}<EOL>\n".format(self.result).encode())
