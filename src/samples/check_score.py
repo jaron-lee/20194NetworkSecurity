@@ -2,7 +2,8 @@ import socket
 import sys
 
 def main(args):
-    HOST = "192.168.200.52"
+    #HOST = "192.168.200.52"
+    HOST = "20194.0.0.19000"
     PORT = int(args[0])
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
