@@ -30,10 +30,12 @@ class StudentClient(asyncio.Protocol):
                 packet_file=b""
                 )
         self.transport.write(start_packet.__serialize__())
+        print("Sent packet")
         #self.transport.write("Hello World".encode())
 
 
     def data_received(self, data):
+        print("Received packet"
         self.d.update(data)
         for packet in self.d.nextPackets():
             print(packet)
@@ -56,6 +58,7 @@ class StudentClient(asyncio.Protocol):
         #            self.instruction_counter += 1
         #    else:
         #        instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
+        
         #        print("C: {}".format(instruction))
         #        self.transport.write(instruction.encode())
         #        self.instruction_counter += 1
