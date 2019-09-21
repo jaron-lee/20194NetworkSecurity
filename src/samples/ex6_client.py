@@ -40,8 +40,9 @@ class StudentClient(asyncio.Protocol):
     def data_received(self, data):
         print("C: Received packet")
         asyncio.sleep(.2)
-        self.d.update(data)
-        for packet in self.d.nextPackets():
+        d = PacketType.Deserializer()
+        d.update(data)
+        for packet in d.nextPackets():
             print("C: ", packet.DEFINITION_IDENTIFIER)
             if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
                 print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
