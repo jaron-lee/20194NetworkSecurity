@@ -46,7 +46,6 @@ class StudentClient(asyncio.Protocol):
         packet = packets[0]
         print(packet)
     
-        time.sleep(.2)
 
         print("C: ", packet.DEFINITION_IDENTIFIER)
         if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
@@ -73,7 +72,7 @@ class StudentClient(asyncio.Protocol):
                 else:
                     instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
 
-                    print("C: {}".format(instruction))
+                    print("CS: {}".format(instruction))
                     self.transport.write(
                             GameCommandPacket(
                                 server_command=instruction

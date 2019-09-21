@@ -16,7 +16,7 @@ class GameCommandPacket(PacketType):
         return cls(server_command=s)# whatever arguments needed to construct the packet)
     
     def command(self):
-        return self.command# whatever you need to get the command for the game
+        return self.server_command# whatever you need to get the command for the game
     
 class GameResponsePacket(PacketType):
     DEFINITION_IDENTIFIER = "jaronresponsepacket" 
