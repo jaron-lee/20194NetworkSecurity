@@ -72,6 +72,8 @@ class StudentClient(asyncio.Protocol):
                                     ).__serialize__()
                                 )
                         self.instruction_counter += 1
+            else:
+                raise ValueError(packet.DEFINITION_IDENTIFIER)
 
 
 
