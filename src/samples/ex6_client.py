@@ -49,7 +49,7 @@ class StudentClient(asyncio.Protocol):
                 print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
                 #if packet.submit_status != AutogradeTestStatus.PASSED:
                 #    print(packet.error)
-            elif packet.DEFINITION_IDENTIFIER == "exercise6.jaron.response":
+            elif packet.DEFINITION_IDENTIFIER == "20194.exercise6.jaron.response":
                 text = packet.server_response
                 print("C :", text)
                 if packet.game_over():

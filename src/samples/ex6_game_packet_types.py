@@ -3,23 +3,23 @@ from playground.network.packet.fieldtypes import STRING, UINT8, BUFFER, BOOL
 from playground.network.packet.fieldtypes.attributes import Optional
 
 class GameCommandPacket(PacketType):
-    DEFINITION_IDENTIFIER = "exercise6.jaron.command"# whatever you want
+    DEFINITION_IDENTIFIER = "20194.exercise6.jaron.command"# whatever you want
     DEFINITION_VERSION = "1.0"
 
     FIELDS = [
-            ("server_command", STRING)
+            ("command", STRING)
         # whatever you want here
     ]
 
     @classmethod
     def create_game_command_packet(cls, s):
-        return cls(server_command=s)# whatever arguments needed to construct the packet)
+        return cls(command=s.command)# whatever arguments needed to construct the packet)
     
     def command(self):
-        return self.server_command# whatever you need to get the command for the game
+        return self.command# whatever you need to get the command for the game
     
 class GameResponsePacket(PacketType):
-    DEFINITION_IDENTIFIER = "exercise6.jaron.response" 
+    DEFINITION_IDENTIFIER = "20194.exercise6.jaron.response" 
     DEFINITION_VERSION = "1.0"
 
 
@@ -31,7 +31,7 @@ class GameResponsePacket(PacketType):
 
     @classmethod
     def create_game_response_packet(cls, response, status):
-        return cls(server_response=response, server_status=status) # whatever you need to construct the packet )
+        return cls(response=response, status=status) # whatever you need to construct the packet )
     
     def game_over(self):
         return self.server_status in ("dead", "escaped")# whatever you need to do to determine if the game is over
