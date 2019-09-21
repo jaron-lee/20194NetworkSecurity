@@ -23,8 +23,8 @@ class StudentClient(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
-        d = PacketType.Deserializer()
-        self.d = d
+        #d = PacketType.Deserializer()
+        #self.d = d
         start_packet = AutogradeStartTest(
                 name="Jaron Lee",
                 team=9,
