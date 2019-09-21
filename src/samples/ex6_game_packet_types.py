@@ -13,7 +13,7 @@ class GameCommandPacket(PacketType):
 
     @classmethod
     def create_game_command_packet(cls, s):
-        return cls(command=s.command)# whatever arguments needed to construct the packet)
+        return cls(command=s)# whatever arguments needed to construct the packet)
     
     def command(self):
         return self.command# whatever you need to get the command for the game
