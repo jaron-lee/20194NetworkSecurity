@@ -45,6 +45,7 @@ class StudentClient(asyncio.Protocol):
         packets = list(d.nextPackets())
         packet = packets[0]
         print(packet)
+        time.sleep(.2)
     
 
         print("C: ", packet.DEFINITION_IDENTIFIER)
