@@ -16,6 +16,7 @@ class StudentClient(asyncio.Protocol):
                             "get hairpin",
                             "unlock chest with hairpin",
                             "open chest",
+                            "look in chest",
                             "get hammer from chest",
                             "hit flyingkey with hammer",
                             "get key",
@@ -63,7 +64,8 @@ class StudentClient(asyncio.Protocol):
                 #if self.instruction_counter < len(self.instructions):
                 if self.instructions[self.instruction_counter] == "hit flyingkey with hammer":
                     if text.split("<EOL>\n")[0].endswith("wall"):
-                        instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
+                        instruction = self.instructions[self.instruction_counter]# + "<EOL>\n"
+                        print("CS: {}".format(instruction))
                         self.transport.write(
                                 GameCommandPacket(
                                     server_command=instruction
@@ -71,7 +73,7 @@ class StudentClient(asyncio.Protocol):
                                 )
                         self.instruction_counter += 1
                 else:
-                    instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
+                    instruction = self.instructions[self.instruction_counter] #+ "<EOL>\n"
 
                     print("CS: {}".format(instruction))
                     self.transport.write(
