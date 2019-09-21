@@ -42,7 +42,7 @@ class StudentClient(asyncio.Protocol):
         self.d.update(data)
         for packet in self.d.nextPackets():
             if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
-                print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status)
+                print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
                 #if packet.submit_status != AutogradeTestStatus.PASSED:
                 #    print(packet.error)
             elif packet.DEFINITION_IDENTIFIER == "exercise6.jaron.response":

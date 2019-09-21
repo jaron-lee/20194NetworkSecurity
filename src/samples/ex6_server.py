@@ -52,7 +52,7 @@ class StudentServer(asyncio.Protocol):
                 text = packet.command
 
             elif packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
-                print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status)
+                print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
             else:
                 raise ValueError(packet.DEFINITION_IDENTIFIER)
 
