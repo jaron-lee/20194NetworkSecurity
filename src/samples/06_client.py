@@ -41,7 +41,9 @@ class StudentClient(asyncio.Protocol):
         print("Received packet")
         self.d.update(data)
         for packet in self.d.nextPackets():
-            print(packet)
+            if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
+                if packet.submit_status != 1:
+                    print(packet.error)
 
 
         #text = data.decode()
