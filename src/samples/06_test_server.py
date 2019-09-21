@@ -5,14 +5,24 @@ from escape_room_006 import *
 import playground
 from ex6_game_packet_types import *
 
+from playground.common.logging import EnablePresetLogging, PRESET_VERBOSE
+EnablePresetLogging(PRESET_VERBOSE)
 
-def new_write_function(string, responses):
-    responses.append(string)
+def new_write_function(string, transport, status):
+    string = string + "<EOL>\n"
+    transport.write(
+            GameResponsePacket(
+                server_response = string,
+                server_status=status
+                ).__serialize__()
+            )
+    print(string)
 
 class StudentServer(asyncio.Protocol):
     def __init__(self):
-        responses = []
-        pass
+        print("S: server started")
+        self.responses = []
+        self.status = None
 
     #async def wait_agents(self):
     #    await asyncio.wait([asyncio.create_task(a) for a in self.game.agents])
@@ -20,44 +30,42 @@ class StudentServer(asyncio.Protocol):
     def connection_made(self, transport):
         print("S: connection made")
         self.transport = transport
-        game = EscapeRoomGame(output=functools.partial(new_write_function, responses=self.responses))
-        game.responses = []
+        game = EscapeRoomGame(output=functools.partial(new_write_function, transport=self.transport, status = self.status))
         game.create_game()
         game.start()
         self.game = game
         #asyncio.create_task(self.wait_agents())
         for a in game.agents:
             asyncio.ensure_future(a)
+        self.d = PacketType.Deserializer()
+        print("S: packet sent")
 
     def connection_lost(self, ex):
         print("S: closing transport")
         self.transport.close()
 
     def data_received(self, data):
-        text = data.decode()
-        print("SR: ", text)
-        asyncio.sleep(.2)
-        lines = text.split("<EOL>\n")
-        #if self.game.status == "playing":
-        if self.game.status == "playing":
-            game_running = True
-        else:
-            game_running = False
-        for line in lines:
-            if len(line) > 0:
-                print("S: ", line)
-                self.game.command(line)
+        self.d.update(data)
+        for packet in self.d.nextPackets():
+            if packet.DEFINITION_IDENTIFIER == "exercise6.jaron.command":
+                print("SR: ", packet.command)
+                text = packet.command
 
-                self.transport.write(
-                        GameResponsePacket(
-                            server_response = self.responses[-1],
-                            server_status=self.game.status
-                            ).__serialize()
-                        )
+            else:
+                raise ValueError()
+            time.sleep(.2)
+            lines = text.split("<EOL>\n")
+            #if self.game.status == "playing":
+            for line in lines:
+                if len(line) > 0:
+                    print("S: ", line)
+                    self.game.command(line)
+                    self.status = self.game.status
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    coro = playground.create_server(StudentServer,"localhost", 1290)
+    coro = loop.create_server(StudentServer,"", 1292)
     server = loop.run_until_complete(coro)
 
     try:
