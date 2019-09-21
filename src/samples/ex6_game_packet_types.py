@@ -4,7 +4,7 @@ from playground.network.packet.fieldtypes.attributes import Optional
 
 class GameCommandPacket(PacketType):
     DEFINITION_IDENTIFIER = "exercise6.jaron.command"# whatever you want
-    DEFINITION_VERSION = 1.0
+    DEFINITION_VERSION = "1.0"
 
     FIELDS = [
             ("command", STRING)
@@ -20,7 +20,7 @@ class GameCommandPacket(PacketType):
     
 class GameResponsePacket(PacketType):
     DEFINITION_IDENTIFIER = "exercise6.jaron.response" 
-    DEFINITION_VERSION = 1.0
+    DEFINITION_VERSION = "1.0"
 
 
     FIELDS = [
