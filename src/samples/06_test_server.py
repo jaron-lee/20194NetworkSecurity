@@ -51,8 +51,7 @@ class StudentServer(asyncio.Protocol):
                 self.transport.write(
                         GameResponsePacket(
                             server_response = self.responses[-1],
-                            server_status="Success"
-                            game_running=game_running
+                            server_status=self.game.status
                             ).__serialize()
                         )
 

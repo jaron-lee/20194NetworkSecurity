@@ -26,8 +26,6 @@ class GameResponsePacket(PacketType):
     FIELDS = [
             ("server_response", STRING),
             ("server_status", STRING),
-            ("game_running", BOOL({Optional: True}))
-
         # whatever you want here
     ]
 
@@ -36,7 +34,7 @@ class GameResponsePacket(PacketType):
         return cls(response=response, status=status) # whatever you need to construct the packet )
     
     def game_over(self):
-        return self.game_running# whatever you need to do to determine if the game is over
+        return self.server_status in ("dead", "escaped")# whatever you need to do to determine if the game is over
     
     def status(self):
         return self.server_status# whatever you need to do to return the status
