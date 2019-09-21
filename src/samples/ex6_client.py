@@ -42,6 +42,7 @@ class StudentClient(asyncio.Protocol):
         asyncio.sleep(.2)
         self.d.update(data)
         for packet in self.d.nextPackets():
+            print("C: ", packet.DEFINITION_IDENTIFIER)
             if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
                 print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
                 #if packet.submit_status != AutogradeTestStatus.PASSED:
