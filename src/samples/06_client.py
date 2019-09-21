@@ -20,6 +20,8 @@ class StudentClient(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
+        d = PacketType.deserializer()
+        self.d = d
         start_packet = AutogradeStartTest(
                 name="Jaron Lee",
                 team=9,
@@ -32,9 +34,8 @@ class StudentClient(asyncio.Protocol):
 
 
     def data_received(self, data):
-        d = PacketType.deserializer()
-        d.update(data)
-        for packet in d.nextPackets():
+        self. d.update(data)
+        for packet in self.d.nextPackets():
             print(packet)
 
 
