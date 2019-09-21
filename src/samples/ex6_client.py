@@ -66,7 +66,7 @@ class StudentClient(asyncio.Protocol):
                         instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
                         self.transport.write(
                                 GameCommandPacket(
-                                    command=instruction
+                                    server_command=instruction
                                     ).__serialize__()
                                 )
                         self.instruction_counter += 1
@@ -76,7 +76,7 @@ class StudentClient(asyncio.Protocol):
                     print("C: {}".format(instruction))
                     self.transport.write(
                             GameCommandPacket(
-                                command=instruction
+                                server_command=instruction
                                 ).__serialize__()
                             )
                     self.instruction_counter += 1
