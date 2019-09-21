@@ -3,6 +3,7 @@ import playground
 import time
 from autograder_ex6_packets import *
 from playground.network.packet import PacketType
+from 06_game_packet_types import *
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
 EnablePresetLogging(PRESET_DEBUG)
@@ -44,7 +45,6 @@ class StudentClient(asyncio.Protocol):
             if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
                 if packet.submit_status != AutogradeTestStatus.PASSED:
                     print(packet.error)
-            el
 
 
         #text = data.decode()
@@ -77,7 +77,7 @@ class StudentClient(asyncio.Protocol):
 if __name__ == "__main__":
 
     loop = asyncio.get_event_loop()
-    coro = playground.create_connection(StudentClient,'20194.0.0.19000',19006)
+    coro = playground.create_connection(StudentClient,'20194.0.0.19000',1290)
     client = loop.run_until_complete(coro)
 
     try:
