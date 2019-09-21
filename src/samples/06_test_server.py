@@ -5,12 +5,6 @@ from escape_room_006 import *
 import playground
 from ex6_game_packet_types import *
 
-def write_function(string, conn):
-    print("SS: ", string)
-    string = string + "<EOL>\n"
-    response = GameResponsePacket(server_response=string,
-            server_status="Success")
-    conn.write(string.__serialize__())
 
 def new_write_function(string, responses):
     responses.append(string)
@@ -59,7 +53,7 @@ class StudentServer(asyncio.Protocol):
                             server_response = self.responses[-1],
                             server_status="Success"
                             game_running=game_running
-                            )
+                            ).__serialize()
                         )
 
 if __name__ == "__main__":

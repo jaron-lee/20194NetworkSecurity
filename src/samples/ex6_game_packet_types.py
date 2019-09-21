@@ -7,7 +7,7 @@ class GameCommandPacket(PacketType):
     DEFINITION_VERSION = 1.0
 
     FIELDS = [
-            ("command": STRING)
+            ("command", STRING)
         # whatever you want here
     ]
 
