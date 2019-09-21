@@ -34,7 +34,7 @@ class StudentClient(asyncio.Protocol):
 
 
     def data_received(self, data):
-        self. d.update(data)
+        self.d.update(data)
         for packet in self.d.nextPackets():
             print(packet)
 
