@@ -34,7 +34,7 @@ class StudentClient(asyncio.Protocol):
         with open("ex6_game_packet_types.py", "rb") as f:
             start_packet.packet_file = f.read()
         self.transport.write(start_packet.__serialize__())
-        print("Sent packet")
+        print("C: Sent Autograde packet")
         #self.transport.write("Hello World".encode())
 
     def data_received(self, data):

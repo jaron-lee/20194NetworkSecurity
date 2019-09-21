@@ -5,8 +5,8 @@ from escape_room_006 import *
 import playground
 from ex6_game_packet_types import *
 
-from playground.common.logging import EnablePresetLogging, PRESET_VERBOSE
-EnablePresetLogging(PRESET_VERBOSE)
+from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
+EnablePresetLogging(PRESET_DEBUG)
 
 def new_write_function(string, transport, status):
     string = string + "<EOL>\n"
