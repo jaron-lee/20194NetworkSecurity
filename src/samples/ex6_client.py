@@ -42,42 +42,44 @@ class StudentClient(asyncio.Protocol):
         time.sleep(.2)
         d = PacketType.Deserializer()
         d.update(data)
-        
-        for packet in d.nextPackets():
-            print("C: ", packet.DEFINITION_IDENTIFIER)
-            if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
-                print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
-                #if packet.submit_status != AutogradeTestStatus.PASSED:
-                #    print(packet.error)
-            elif packet.DEFINITION_IDENTIFIER == "20194.exercise6.jaron.response":
-                text = packet.server_response
-                print("C :", text)
-                if packet.game_over():
-                    print("C: GAME OVER - safe to terminate")
+        packets = list(d.nextPackets())
+        packet = packets[0]
+    
 
-                elif self.instruction_counter < len(self.instructions):
-                    #if self.instruction_counter < len(self.instructions):
-                    if self.instructions[self.instruction_counter] == "hit flyingkey with hammer":
-                        if text.split("<EOL>\n")[0].endswith("wall"):
-                            instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
-                            self.transport.write(
-                                    GameCommandPacket(
-                                        command=instruction
-                                        ).__serialize__()
-                                    )
-                            self.instruction_counter += 1
-                    else:
+        print("C: ", packet.DEFINITION_IDENTIFIER)
+        if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
+            print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
+            #if packet.submit_status != AutogradeTestStatus.PASSED:
+            #    print(packet.error)
+        elif packet.DEFINITION_IDENTIFIER == "jaronresponsepacket":
+            text = packet.server_response
+            print("C :", text)
+            if packet.game_over():
+                print("C: GAME OVER - safe to terminate")
+
+            elif self.instruction_counter < len(self.instructions):
+                #if self.instruction_counter < len(self.instructions):
+                if self.instructions[self.instruction_counter] == "hit flyingkey with hammer":
+                    if text.split("<EOL>\n")[0].endswith("wall"):
                         instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
-
-                        print("C: {}".format(instruction))
                         self.transport.write(
                                 GameCommandPacket(
                                     command=instruction
                                     ).__serialize__()
                                 )
                         self.instruction_counter += 1
-            else:
-                raise ValueError(packet.DEFINITION_IDENTIFIER)
+                else:
+                    instruction = self.instructions[self.instruction_counter] + "<EOL>\n"
+
+                    print("C: {}".format(instruction))
+                    self.transport.write(
+                            GameCommandPacket(
+                                command=instruction
+                                ).__serialize__()
+                            )
+                    self.instruction_counter += 1
+        else:
+            raise ValueError(packet.DEFINITION_IDENTIFIER)
 
 
 
