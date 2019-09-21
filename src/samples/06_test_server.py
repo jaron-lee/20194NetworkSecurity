@@ -3,7 +3,7 @@ import time
 import functools
 from escape_room_006 import *
 import playground
-from 06_game_packet_types import *
+from ex6_game_packet_types import *
 
 def write_function(string, conn):
     print("SS: ", string)

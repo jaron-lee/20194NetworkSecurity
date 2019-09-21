@@ -3,7 +3,7 @@ import playground
 import time
 from autograder_ex6_packets import *
 from playground.network.packet import PacketType
-from 06_game_packet_types import *
+from ex6_game_packet_types import *
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
 EnablePresetLogging(PRESET_DEBUG)
