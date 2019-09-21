@@ -32,7 +32,7 @@ class StudentClient(asyncio.Protocol):
                 port=7816
                 )
         with open("ex6_game_packet_types.py", "rb") as f:
-            packet.packet_file = f.read()
+            start_packet.packet_file = f.read()
         self.transport.write(start_packet.__serialize__())
         print("Sent packet")
         #self.transport.write("Hello World".encode())
