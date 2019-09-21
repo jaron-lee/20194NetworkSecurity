@@ -41,7 +41,6 @@ class StudentClient(asyncio.Protocol):
         print("C: Received packet")
         asyncio.sleep(.2)
         self.d.update(data)
-        print(list(self.d.nextPackets()))
         for packet in self.d.nextPackets():
             print("C: ", packet.DEFINITION_IDENTIFIER)
             if packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
@@ -50,7 +49,7 @@ class StudentClient(asyncio.Protocol):
                 #    print(packet.error)
             elif packet.DEFINITION_IDENTIFIER == "exercise6.jaron.response":
                 text = packet.server_response
-                print(text)
+                print("C: ", text)
                 if packet.game_over():
                     print("C: GAME OVER - safe to terminate")
 
