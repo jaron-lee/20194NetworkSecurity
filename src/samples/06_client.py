@@ -4,6 +4,9 @@ import time
 from autograder_ex6_packets import *
 from playground.network.packet import PacketType
 
+from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
+EnablePresetLogging(PRESET_DEBUG)
+
 class StudentClient(asyncio.Protocol):
     def __init__(self):
         self.instruction_counter = 0
