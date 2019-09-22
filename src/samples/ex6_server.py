@@ -30,7 +30,7 @@ class StudentServer(asyncio.Protocol):
                         server_status=game.status
                         ).__serialize__()
             )
-            print("S :", string)
+            print("S:", string)
 
         game = EscapeRoomGame(output=write_function)
         game.create_game()
@@ -52,8 +52,8 @@ class StudentServer(asyncio.Protocol):
         packets = list(d.nextPackets())
         packet = packets[0]
         if packet.DEFINITION_IDENTIFIER == "jaroncommandpacket":
-            print("SR: ", packet.command)
-            text = packet.command
+            print("SR: ", packet.command())
+            text = packet.command()
 
         elif packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
             print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
@@ -72,7 +72,7 @@ class StudentServer(asyncio.Protocol):
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    coro = playground.create_server(StudentServer,"localhost", 7818)
+    coro = playground.create_server(StudentServer,"localhost", 7819)
     server = loop.run_until_complete(coro)
 
     try:
