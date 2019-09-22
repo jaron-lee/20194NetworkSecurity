@@ -3,7 +3,7 @@ import time
 import functools
 from escape_room_006 import *
 import playground
-from ex6_game_packet_types import GameResponsePacket
+from ex6_game_packet_types import *
 from autograder_ex6_packets import *
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
@@ -71,7 +71,7 @@ class StudentServer(asyncio.Protocol):
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    coro = playground.create_server(StudentServer,"localhost", 7823)
+    coro = playground.create_server(StudentServer,"localhost", 7824)
     server = loop.run_until_complete(coro)
 
     try:
