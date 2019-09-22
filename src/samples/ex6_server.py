@@ -3,7 +3,7 @@ import time
 import functools
 from escape_room_006 import *
 import playground
-from ex6_game_packet_types import *
+from ex6_game_packet_types import GameResponsePacket
 from autograder_ex6_packets import *
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
@@ -13,8 +13,6 @@ EnablePresetLogging(PRESET_DEBUG)
 class StudentServer(asyncio.Protocol):
     def __init__(self):
         print("S: server started")
-        self.responses = []
-        self.status = None
 
     #async def wait_agents(self):
     #    await asyncio.wait([asyncio.create_task(a) for a in self.game.agents])
