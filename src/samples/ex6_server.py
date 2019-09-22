@@ -70,7 +70,7 @@ class StudentServer(asyncio.Protocol):
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    coro = playground.create_server(StudentServer,"localhost", 7821)
+    coro = playground.create_server(StudentServer,"localhost", 7822)
     server = loop.run_until_complete(coro)
 
     try:
