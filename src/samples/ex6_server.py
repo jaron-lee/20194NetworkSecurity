@@ -51,7 +51,7 @@ class StudentServer(asyncio.Protocol):
         d.update(data)
         packets = list(d.nextPackets())
         packet = packets[0]
-        if packet.DEFINITION_IDENTIFIER == "jaronpacketcommand":
+        if packet.DEFINITION_IDENTIFIER == "jaroncommandpacket":
             print("SR: ", packet.command)
             text = packet.command
 
