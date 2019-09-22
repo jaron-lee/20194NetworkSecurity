@@ -9,9 +9,19 @@ from autograder_ex6_packets import *
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
 EnablePresetLogging(PRESET_DEBUG)
 
+def write_function(string, self):
+        #string = string + "<EOL>\n"
+    self.transport.write(
+        GameResponsePacket(
+            server_response = string,
+            server_status=self.game.status
+            ).__serialize__()
+        )
+    print("S:", string)
 
 class StudentServer(asyncio.Protocol):
     def __init__(self):
+        self.status = None
         print("S: server started")
 
     #async def wait_agents(self):
@@ -20,17 +30,8 @@ class StudentServer(asyncio.Protocol):
     def connection_made(self, transport):
         print("S: connection made")
         self.transport = transport
-        def write_function(string):
-            #string = string + "<EOL>\n"
-            self.transport.write(
-                    GameResponsePacket(
-                        server_response = string,
-                        server_status=game.status
-                        ).__serialize__()
-            )
-            print("S:", string)
 
-        game = EscapeRoomGame(output=write_function)
+        game = EscapeRoomGame(output=functools.partial(write_function, self=self))
         game.create_game()
         game.start()
         self.game = game
@@ -65,12 +66,12 @@ class StudentServer(asyncio.Protocol):
             if len(line) > 0:
                 print("S: ", line)
                 self.game.command(line)
-                    #self.status = self.game.status
+                self.status = self.game.status
 
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    coro = playground.create_server(StudentServer,"localhost", 7822)
+    coro = playground.create_server(StudentServer,"localhost", 7823)
     server = loop.run_until_complete(coro)
 
     try:
