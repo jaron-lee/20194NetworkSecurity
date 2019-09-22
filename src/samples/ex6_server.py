@@ -9,12 +9,12 @@ from autograder_ex6_packets import *
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
 EnablePresetLogging(PRESET_DEBUG)
 
-def write_function(string, self):
+def write_function(string, transport, status):
         #string = string + "<EOL>\n"
-    self.transport.write(
+    transport.write(
         GameResponsePacket(
             server_response = string,
-            server_status=self.game.status
+            server_status=status
             ).__serialize__()
         )
     print("S:", string)
@@ -31,7 +31,7 @@ class StudentServer(asyncio.Protocol):
         print("S: connection made")
         self.transport = transport
 
-        game = EscapeRoomGame(output=functools.partial(write_function, self=self))
+        game = EscapeRoomGame(output=functools.partial(write_function, transport=self.transport, status=self.status))
         game.create_game()
         game.start()
         self.game = game
