@@ -11,6 +11,8 @@ EnablePresetLogging(PRESET_DEBUG)
 
 def write_function(string, transport, status):
         #string = string + "<EOL>\n"
+    if string.startswith("VICTORY"):
+        status = "escaped"
     transport.write(
         GameResponsePacket(
             server_response = string,
