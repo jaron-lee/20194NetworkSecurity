@@ -4,19 +4,11 @@ import functools
 from escape_room_006 import *
 import playground
 from ex6_game_packet_types import *
+from autograder_ex6_packets import *
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
 EnablePresetLogging(PRESET_DEBUG)
 
-def new_write_function(string, transport, status):
-    string = string + "<EOL>\n"
-    transport.write(
-            GameResponsePacket(
-                server_response = string,
-                server_status=status
-                ).__serialize__()
-            )
-    print(string)
 
 class StudentServer(asyncio.Protocol):
     def __init__(self):
@@ -30,14 +22,23 @@ class StudentServer(asyncio.Protocol):
     def connection_made(self, transport):
         print("S: connection made")
         self.transport = transport
-        game = EscapeRoomGame(output=functools.partial(new_write_function, transport=self.transport, status = self.status))
+        def write_function(string):
+            #string = string + "<EOL>\n"
+            self.transport.write(
+                    GameResponsePacket(
+                        server_response = string,
+                        server_status=game.status
+                        ).__serialize__()
+            )
+            print("S :", string)
+
+        game = EscapeRoomGame(output=write_function)
         game.create_game()
         game.start()
         self.game = game
         #asyncio.create_task(self.wait_agents())
         for a in game.agents:
             asyncio.ensure_future(a)
-        self.d = PacketType.Deserializer()
         print("S: packet sent")
 
     def connection_lost(self, ex):
@@ -45,9 +46,10 @@ class StudentServer(asyncio.Protocol):
         self.transport.close()
 
     def data_received(self, data):
-        self.d.update(data)
-        for packet in self.d.nextPackets():
-            if packet.DEFINITION_IDENTIFIER == "exercise6.jaron.command":
+        d = PacketType.Deserializer()
+        d.update(data)
+        for packet in d.nextPackets():
+            if packet.DEFINITION_IDENTIFIER == "jaronpacketcommand":
                 print("SR: ", packet.command)
                 text = packet.command
 
@@ -63,7 +65,7 @@ class StudentServer(asyncio.Protocol):
                 if len(line) > 0:
                     print("S: ", line)
                     self.game.command(line)
-                    self.status = self.game.status
+                    #self.status = self.game.status
 
 
 if __name__ == "__main__":
