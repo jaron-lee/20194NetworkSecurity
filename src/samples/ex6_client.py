@@ -31,7 +31,7 @@ class StudentClient(asyncio.Protocol):
                 name="Jaron Lee",
                 team=9,
                 email="jaron.lee@jhu.edu",
-                port=7825
+                port=7826
                 )
         with open("ex6_game_packet_types.py", "rb") as f:
             start_packet.packet_file = f.read()
