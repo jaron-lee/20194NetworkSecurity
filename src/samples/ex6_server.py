@@ -46,25 +46,27 @@ class StudentServer(asyncio.Protocol):
         self.transport.close()
 
     def data_received(self, data):
+        print("S: Received packet")
         d = PacketType.Deserializer()
         d.update(data)
-        for packet in d.nextPackets():
-            if packet.DEFINITION_IDENTIFIER == "jaronpacketcommand":
-                print("SR: ", packet.command)
-                text = packet.command
+        packets = list(d.nextPackets())
+        packet = packets[0]
+        if packet.DEFINITION_IDENTIFIER == "jaronpacketcommand":
+            print("SR: ", packet.command)
+            text = packet.command
 
-            elif packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
-                print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
-            else:
-                raise ValueError(packet.DEFINITION_IDENTIFIER)
+        elif packet.DEFINITION_IDENTIFIER == "20194.exercise6.autogradesubmitresponse":
+            print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
+        else:
+            raise ValueError(packet.DEFINITION_IDENTIFIER)
 
-            time.sleep(.2)
-            lines = text.split("<EOL>\n")
-            #if self.game.status == "playing":
-            for line in lines:
-                if len(line) > 0:
-                    print("S: ", line)
-                    self.game.command(line)
+        time.sleep(.2)
+        lines = text.split("<EOL>\n")
+        #if self.game.status == "playing":
+        for line in lines:
+            if len(line) > 0:
+                print("S: ", line)
+                self.game.command(line)
                     #self.status = self.game.status
 
 
