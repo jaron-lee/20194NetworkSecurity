@@ -14,11 +14,12 @@ def create_game_init_packet(username):
     return pkt
     
 
-def process_game_init_packet(pkt):
+def process_game_init(pkt):
     """
     Returns username from game init packet
 
     """
+    print("blab")
     return pkt.username
 
 def create_game_require_pay_packet(unique_id, account, amount):
