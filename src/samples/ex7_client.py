@@ -60,8 +60,7 @@ class StudentClient(asyncio.Protocol):
             )
             #if packet.submit_status != AutogradeTestStatus.PASSED:
             #    print(packet.error)
-        #elif packet.DEFINITION_IDENTIFIER == "responsepacket":
-        elif isinstance(packet, gc_packet_types.GameResponsePacket)
+        elif isinstance(packet, gc_packet_types.GameResponsePacket):
             text = packet.server_response
             print("C :", text)
             if packet.game_over():
