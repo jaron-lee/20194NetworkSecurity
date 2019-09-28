@@ -56,6 +56,7 @@ class StudentClient(asyncio.Protocol):
 
             if packet.submit_status == AutogradeTestStatus.PASSED:
                 request_start_packet = gc_packet_types.create_game_init_packet(username="jlee662")
+                print("C: {}".format(request_start_packet.DEFINITION_IDENTIFIER))
                 self.transport.write(
                         request_start_packet.__serialize__()
                 )
