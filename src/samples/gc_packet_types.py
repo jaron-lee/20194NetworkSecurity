@@ -74,6 +74,7 @@ class GameInitPacket(PacketType):
 
     FIELDS = [
             ("username", STRING)
+    ]
 
 
 class GameRequirePayPacket(PacketType):
