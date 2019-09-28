@@ -46,7 +46,7 @@ class StudentClient(asyncio.Protocol):
         packets = list(d.nextPackets())
         packet = packets[0]
         print(packet)
-        time.sleep(.2)
+        time.sleep(.3)
     
 
         print("C: ", packet.DEFINITION_IDENTIFIER)
@@ -58,6 +58,7 @@ class StudentClient(asyncio.Protocol):
             self.transport.write(
                     request_start_packet.__serialize__()
             )
+            print("C: Sent game start packet")
             #if packet.submit_status != AutogradeTestStatus.PASSED:
             #    print(packet.error)
         elif isinstance(packet, gc_packet_types.GameResponsePacket):
