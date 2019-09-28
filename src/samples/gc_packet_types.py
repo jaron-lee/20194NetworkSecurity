@@ -14,7 +14,7 @@ def create_game_init_packet(username):
     return pkt
     
 
-def process_game_init(pkt):
+def process_game_init_packet(pkt):
     """
     Returns username from game init packet
 
