@@ -2,7 +2,7 @@ import asyncio
 import playground
 import time
 from autograder_ex6_packets import AutogradeStartTest, AutogradeTestStatus, 
- playground.network.packet import PacketType
+from playground.network.packet import PacketType
 import gc_packet_types
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
