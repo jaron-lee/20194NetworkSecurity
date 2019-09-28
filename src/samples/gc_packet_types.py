@@ -10,7 +10,9 @@ def create_game_init_packet(username):
     """
     Creates packet for initiating game
     """
-    pass
+    pkt = GameInitPacket(username=username)
+    return pkt
+    
 
 def process_game_init(pkt):
     """
