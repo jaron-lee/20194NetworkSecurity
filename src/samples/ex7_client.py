@@ -49,7 +49,7 @@ class StudentClient(asyncio.Protocol):
         time.sleep(.5)
     
 
-        print("C: ", packet.DEFINITION_IDENTIFIER)
+        print("C: New packet - ", packet.DEFINITION_IDENTIFIER)
         if isinstance(packet, AutogradeTestStatus):
             print("C: {}".format(packet.test_id))
             print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
