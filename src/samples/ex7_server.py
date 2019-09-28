@@ -32,7 +32,8 @@ class StudentServer(asyncio.Protocol):
         print("S: connection made")
         self.transport = transport
 
-        game = EscapeRoomGame(output=functools.partial(write_function, transport=self.transport, status=self.status))
+        game = EscapeRoomGame()
+        game.output = functools.partial(write_function, transport=self.transport, status=game.status)
         game.create_game()
         game.start()
         self.game = game
