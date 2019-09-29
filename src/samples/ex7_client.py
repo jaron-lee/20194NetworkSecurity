@@ -134,6 +134,7 @@ class StudentClient(asyncio.Protocol):
             print("C: Paid {} to {}".format(amount, account))
 
             if payment_result:
+                print("C: Sending receipt")
                 pay_packet = gc_packet_types.create_game_pay_packet(
                         receipt=payment_result.Receipt,
                         receipt_signature=payment_result.ReceiptSignature)
