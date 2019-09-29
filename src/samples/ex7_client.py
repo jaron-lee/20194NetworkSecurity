@@ -124,7 +124,7 @@ class StudentClient(asyncio.Protocol):
                     )
                     print("C: Sent game start packet")
                 else:
-                    print("C: 
+                    print("C: OK")
             #if packet.submit_status != AutogradeTestStatus.PASSED:
             #    print(packet.error)
         elif isinstance(packet, gc_packet_types.GameRequirePayPacket):
