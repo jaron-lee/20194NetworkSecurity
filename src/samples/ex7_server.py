@@ -92,8 +92,8 @@ class StudentServer(asyncio.Protocol):
             try:
                 verification = verify(
                         bank_client=self.bank_client, 
-                        receipt_bytes=receipt.encode(), 
-                        signature_bytes=signature.encode(), 
+                        receipt_bytes=receipt, 
+                        signature_bytes=signature, 
                         dst=SRC_ACCOUNT,
                         amount=10, 
                         memo="graphchess")
