@@ -134,6 +134,7 @@ class StudentClient(asyncio.Protocol):
                     memo=unique_id))
             print("C: Paid {} to {}".format(amount, account))
             def send_payment(payment_result, self):
+                payment_result = payment_result.result()
                 print("C: ", payment_result)
                 pay_packet = gc_packet_types.create_game_pay_packet(
                         receipt=payment_result.Receipt,
