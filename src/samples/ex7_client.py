@@ -4,9 +4,64 @@ import time
 from autograder_ex6_packets import AutogradeStartTest, AutogradeTestStatus
 from playground.network.packet import PacketType
 import gc_packet_types
+from CipherUtil import loadCertFromFile
+from BankCore import LedgerLineStorage, LedgerLine
+from OnlineBank import BankClientProtocol, OnlineBankConfig
+import getpass, sys, os, asyncio
 
 from playground.common.logging import EnablePresetLogging, PRESET_DEBUG
 EnablePresetLogging(PRESET_DEBUG)
+
+bankconfig = OnlineBankConfig()
+bank_addr =     bankconfig.get_parameter("CLIENT", "bank_addr")
+bank_port = int(bankconfig.get_parameter("CLIENT", "bank_port"))
+bank_stack     =     bankconfig.get_parameter("CLIENT", "stack","default")
+bank_username  =     bankconfig.get_parameter("CLIENT", "username")
+
+certPath = os.path.join(bankconfig.path(), "bank.cert")
+bank_cert = loadCertFromFile(certPath)
+SRC_ACCOUNT = "jlee662_account"
+
+def verify(bank_client, receipt_bytes, signature_bytes, dst, amount, memo):
+    if not bank_client.verify(receipt_bytes, signature_bytes):
+        raise Exception("Bad receipt. Not correctly signed by bank")
+    ledger_line = LedgerLineStorage.deserialize(receipt_bytes)
+    if ledger_line.getTransactionAmount(dst) != amount:
+        raise Exception("Invalid amount. Expected {} got {}".format(amount, ledger_line.getTransactionAmount(dst)))
+    elif ledger_line.memo(dst) != memo:
+        raise Exception("Invalid memo. Expected {} got {}".format(memo, ledger_line.memo()))
+    return True
+
+async def transfer(bank_client, src, dst, amount, memo):
+    await playground.create_connection(
+            lambda: bank_client,
+            bank_addr,
+            bank_port,
+            family='default'
+            )
+    print("Connected. Logging in.")
+        
+    try:
+        await bank_client.loginToServer()
+    except Exception as e:
+        print("Login error. {}".format(e))
+        return False
+
+    try:
+        await bank_client.switchAccount(src)
+    except Exception as e:
+        print("Could not set source account as {} because {}".format(
+            src,
+            e))
+        return False
+    
+    try:
+        result = await bank_client.transfer(dst, amount, memo)
+    except Exception as e:
+        print("Could not transfer because {}".format(e))
+        return False
+    
+    return result
 
 class StudentClient(asyncio.Protocol):
     def __init__(self):
@@ -64,6 +119,28 @@ class StudentClient(asyncio.Protocol):
                 print("C: Sent game start packet")
             #if packet.submit_status != AutogradeTestStatus.PASSED:
             #    print(packet.error)
+        elif isinstance(packet, gc_packet_types.GameRequirePayPacket):
+            unique_id, account, amount = gc_packet_types.process_game_require_pay_packet(packet)
+
+            payment_result = await transfer(
+                    bank_client=bank_client, 
+                    src=SRC_ACCOUNT,
+                    dst=account,
+                    amount=amount,
+                    memo=unique_id)
+            print("C: Paid {} to {}".format(amount, account))
+
+            if payment_result:
+                pay_packet = gc_packet_types.create_game_pay_packet(
+                        receipt=payment_result.Receipt,
+                        receipt_signature=payment_result.ReceiptSignature)
+
+                self.transport.write(
+                        pay_packet.__serialize__()
+                )
+
+
+
         elif isinstance(packet, gc_packet_types.GameResponsePacket):
             text = packet.server_response
             print("C :", text)
