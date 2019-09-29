@@ -64,7 +64,10 @@ async def transfer(bank_client, src, dst, amount, memo):
     return result
 
 class StudentClient(asyncio.Protocol):
-    def __init__(self, bank_client):
+    def __init__(self):
+        username = "jlee662" # could override at the command line
+        password = getpass.getpass("Enter password for {}: ".format(username))
+        bank_client = BankClientProtocol(bank_cert, username, password) 
         self.bank_client = bank_client
         self.instruction_counter = 0
         self.instructions = [
@@ -175,9 +178,6 @@ class StudentClient(asyncio.Protocol):
 
 
 if __name__ == "__main__":
-    username = "jlee662" # could override at the command line
-    password = getpass.getpass("Enter password for {}: ".format(username))
-    bank_client = BankClientProtocol(bank_cert, username, password) 
 
     loop = asyncio.get_event_loop()
     coro = playground.create_connection(StudentClient,host='20194.0.0.19000',port=19007, bank_client=bank_client)
