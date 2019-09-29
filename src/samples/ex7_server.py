@@ -87,12 +87,13 @@ class StudentServer(asyncio.Protocol):
                     pay_packet.__serialize__()
             )
         elif isinstance(packet, gc_packet_types.GamePayPacket):
-            receipt_bytes, signature_bytes = gc_packet_types.process_game_pay_packet(packet)
+            receipt, signature = gc_packet_types.process_game_pay_packet(packet)
+            print("S: {}".format(receipt))
             try:
                 verification = verify(
                         bank_client=self.bank_client, 
-                        receipt_bytes=receipt_bytes, 
-                        signature_bytes=signature_bytes, 
+                        receipt_bytes=receipt.encode(), 
+                        signature_bytes=signature.encode(), 
                         dst=SRC_ACCOUNT,
                         amount=10, 
                         memo="graphchess")
