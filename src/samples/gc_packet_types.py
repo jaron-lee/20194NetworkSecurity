@@ -53,7 +53,7 @@ def process_game_pay_packet(pkt):
 
 def create_game_response(response, status):
     
-    pkt = GameResponsePacket(server_response=response, server_status=status)
+    pkt = GameResponsePacket(response=response, status=status)
 
     return pkt
 
