@@ -107,7 +107,7 @@ class GameCommandPacket(PacketType):
     DEFINITION_VERSION = "1.0"
 
     FIELDS = [
-            ("server_command", STRING)
+            ("command", STRING)
         # whatever you want here
     ]
 
@@ -119,8 +119,8 @@ class GameResponsePacket(PacketType):
 
 
     FIELDS = [
-            ("server_response", STRING),
-            ("server_status", STRING),
+            ("response", STRING),
+            ("status", STRING),
         # whatever you want here
     ]
 
