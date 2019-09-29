@@ -64,7 +64,8 @@ async def transfer(bank_client, src, dst, amount, memo):
     return result
 
 class StudentClient(asyncio.Protocol):
-    def __init__(self):
+    def __init__(self, bank_client):
+        self.bank_client = bank_client
         self.instruction_counter = 0
         self.instructions = [
                             "look mirror", 
@@ -122,7 +123,7 @@ class StudentClient(asyncio.Protocol):
         elif isinstance(packet, gc_packet_types.GameRequirePayPacket):
             unique_id, account, amount = gc_packet_types.process_game_require_pay_packet(packet)
 
-            payment_result = asyncio.ensure_future(transfer( bank_client=bank_client, 
+            payment_result = asyncio.ensure_future(transfer( bank_client=self.bank_client, 
                     src=SRC_ACCOUNT,
                     dst=account,
                     amount=amount,
@@ -174,9 +175,12 @@ class StudentClient(asyncio.Protocol):
 
 
 if __name__ == "__main__":
+    username = "jlee662" # could override at the command line
+    password = getpass.getpass("Enter password for {}: ".format(username))
+    bank_client = BankClientProtocol(bank_cert, username, password) 
 
     loop = asyncio.get_event_loop()
-    coro = playground.create_connection(StudentClient,'20194.0.0.19000',19007)
+    coro = playground.create_connection(StudentClient,host='20194.0.0.19000',port=19007, bank_client=bank_client)
     client = loop.run_until_complete(coro)
 
     try:
