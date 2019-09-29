@@ -175,7 +175,7 @@ class StudentClient(asyncio.Protocol):
 
                     print("CS: {}".format(instruction))
                     self.transport.write(
-                            gc_packet_typles.create_command_packet(command=instruction).__serialize__()
+                            gc_packet_types.create_command_packet(command=instruction).__serialize__()
                     )
                     self.instruction_counter += 1
         else:
