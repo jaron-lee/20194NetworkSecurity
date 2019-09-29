@@ -143,7 +143,7 @@ class StudentClient(asyncio.Protocol):
                 self.transport.write(
                         pay_packet.__serialize__()
                         )
-                print("C: Sending receipt {}".format(payment_reuslt.Receipt))
+                print("C: Sending receipt {}".format(payment_result.Receipt))
 
             payment_result.add_done_callback(functools.partial(send_payment, self=self))
 
