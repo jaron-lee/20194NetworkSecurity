@@ -1,4 +1,5 @@
 import asyncio
+import functools
 import playground
 import time
 from autograder_ex6_packets import AutogradeStartTest, AutogradeTestStatus
@@ -132,7 +133,7 @@ class StudentClient(asyncio.Protocol):
                     amount=amount,
                     memo=unique_id))
             print("C: Paid {} to {}".format(amount, account))
-            def send_payment():
+            def send_payment(payment_result, self):
                 print("C: ", payment_result)
                 pay_packet = gc_packet_types.create_game_pay_packet(
                         receipt=payment_result.Receipt,
@@ -143,11 +144,7 @@ class StudentClient(asyncio.Protocol):
                         )
                 print("C: Sending receipt {}".format(payment_reuslt.Receipt))
 
-            payment_result.add_done_callback(send_payment)
-
-            
-
-
+            payment_result.add_done_callback(functools.partial(send_payment, self=self))
 
 
         elif isinstance(packet, gc_packet_types.GameResponsePacket):
