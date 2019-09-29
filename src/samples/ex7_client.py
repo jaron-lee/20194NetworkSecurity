@@ -141,7 +141,7 @@ class StudentClient(asyncio.Protocol):
                 self.transport.write(
                         pay_packet.__serialize__()
                 )
-                print("C: Sending receipt {}".format(payment_reuslt.Receipt)
+                print("C: Sending receipt {}".format(payment_reuslt.Receipt))
 
 
 
