@@ -132,8 +132,10 @@ class StudentClient(asyncio.Protocol):
                     amount=amount,
                     memo=unique_id))
             print("C: Paid {} to {}".format(amount, account))
+            done, pending = await asyncio.wait({payment_result})
 
-            if payment_result:
+
+            if payment_result in done:
                 pay_packet = gc_packet_types.create_game_pay_packet(
                         receipt=payment_result.Receipt,
                         receipt_signature=payment_result.ReceiptSignature)
