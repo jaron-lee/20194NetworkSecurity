@@ -124,3 +124,6 @@ class GameResponsePacket(PacketType):
         # whatever you want here
     ]
 
+
+    def game_over(self):
+        return status in ("dead", "escaped")
