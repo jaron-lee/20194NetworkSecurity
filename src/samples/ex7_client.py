@@ -152,7 +152,7 @@ class StudentClient(asyncio.Protocol):
 
 
         elif isinstance(packet, gc_packet_types.GameResponsePacket):
-            text = packet.server_response
+            text = packet.response
             print("C :", text)
             if packet.game_over():
                 print("C: GAME OVER - safe to terminate")
@@ -164,20 +164,16 @@ class StudentClient(asyncio.Protocol):
                         instruction = self.instructions[self.instruction_counter]# + "<EOL>\n"
                         print("CS: {}".format(instruction))
                         self.transport.write(
-                                GameCommandPacket(
-                                    server_command=instruction
-                                    ).__serialize__()
-                                )
+                                gc_packet_types.create_command_packet(command=instruction).__serialize__()
+                        )
                         self.instruction_counter += 1
                 else:
                     instruction = self.instructions[self.instruction_counter] #+ "<EOL>\n"
 
                     print("CS: {}".format(instruction))
                     self.transport.write(
-                            GameCommandPacket(
-                                server_command=instruction
-                                ).__serialize__()
-                            )
+                            gc_packet_typles.create_command_packet(command=instruction).__serialize__()
+                    )
                     self.instruction_counter += 1
         else:
             raise ValueError(packet.DEFINITION_IDENTIFIER)

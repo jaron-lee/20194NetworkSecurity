@@ -63,7 +63,6 @@ class StudentServer(asyncio.Protocol):
         #asyncio.create_task(self.wait_agents())
         for a in game.agents:
             asyncio.ensure_future(a)
-        print("S: packet sent")
 
     def connection_lost(self, ex):
         print("S: closing transport")
@@ -101,7 +100,7 @@ class StudentServer(asyncio.Protocol):
                 self.transport.write(
                     create_game_response_packet(
                         response="",
-                        status="dead")
+                        status="dead").__serialize__()
                 )
 
                 self.transport.close()
@@ -118,6 +117,7 @@ class StudentServer(asyncio.Protocol):
                     print("S: ", line)
                     assert self.verification, "S: payment not verified"
                     self.game.command(line)
+
         else:
             raise ValueError(packet.DEFINITION_IDENTIFIER)
 
