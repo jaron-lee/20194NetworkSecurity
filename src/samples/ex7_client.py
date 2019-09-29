@@ -132,8 +132,7 @@ class StudentClient(asyncio.Protocol):
                     amount=amount,
                     memo=unique_id))
             print("C: Paid {} to {}".format(amount, account))
-
-            if payment_result.done():
+            def send_payment():
                 print("C: ", payment_result)
                 pay_packet = gc_packet_types.create_game_pay_packet(
                         receipt=payment_result.Receipt,
@@ -141,8 +140,13 @@ class StudentClient(asyncio.Protocol):
 
                 self.transport.write(
                         pay_packet.__serialize__()
-                )
+                        )
                 print("C: Sending receipt {}".format(payment_reuslt.Receipt))
+
+            payment_result.add_done_callback(send_payment)
+
+            
+
 
 
 
