@@ -80,7 +80,7 @@ class StudentServer(asyncio.Protocol):
             username = gc_packet_types.process_game_init(packet)
 
             pay_packet = gc_packet_types.create_game_require_pay_packet(unique_id="graphchess",
-                    account="jlee662_account",
+                    account=SRC_ACCOUNT,
                     amount=10)
 
             self.transport.write(
@@ -93,6 +93,7 @@ class StudentServer(asyncio.Protocol):
                         bank_client=self.bank_client, 
                         receipt_bytes=receipt_bytes, 
                         signature_bytes=signature_bytes, 
+                        dst=SRC_ACCOUNT,
                         amount=10, 
                         memo="graphchess")
             except Exception as e:
