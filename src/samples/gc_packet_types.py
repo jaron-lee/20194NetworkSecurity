@@ -62,7 +62,7 @@ def process_game_response(pkt):
     return pkt.response, pkt.status
 
 
-def create_game_commannd(command):
+def create_game_command(command):
 
     pkt = GameCommandPacket(server_command=command)
 
@@ -98,8 +98,8 @@ class GamePayPacket(PacketType):
     DEFINITION_VERSION = "1.0"
 
     FIELDS = [
-        ("receipt", STRING),
-        ("receipt_signature", STRING)
+        ("receipt", BUFFER),
+        ("receipt_signature", BUFFER)
     ]
 
 class GameCommandPacket(PacketType):
