@@ -180,7 +180,7 @@ class StudentClient(asyncio.Protocol):
 if __name__ == "__main__":
 
     loop = asyncio.get_event_loop()
-    coro = playground.create_connection(StudentClient,host='20194.0.0.19000',port=19007, bank_client=bank_client)
+    coro = playground.create_connection(StudentClient,host='20194.0.0.19000',port=19007)
     client = loop.run_until_complete(coro)
 
     try:
