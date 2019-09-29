@@ -117,6 +117,7 @@ class StudentServer(asyncio.Protocol):
         for line in lines:
             if len(line) > 0:
                 print("S: ", line)
+                assert self.verification, "S: payment not verified"
                 self.game.command(line)
 
 
