@@ -141,14 +141,15 @@ class StudentClient(asyncio.Protocol):
             def send_payment(payment_result, self):
                 payment_result = payment_result.result()
                 print("C: ", payment_result)
-                pay_packet = gc_packet_types.create_game_pay_packet(
-                        receipt=payment_result.Receipt,
-                        receipt_signature=payment_result.ReceiptSignature)
+                if payment_result:
+                    pay_packet = gc_packet_types.create_game_pay_packet(
+                            receipt=payment_result.Receipt,
+                            receipt_signature=payment_result.ReceiptSignature)
 
-                self.transport.write(
-                        pay_packet.__serialize__()
-                )
-                print("C: Sending receipt {}".format(payment_result.Receipt))
+                    self.transport.write(
+                            pay_packet.__serialize__()
+                    )
+                    print("C: Sending receipt {}".format(payment_result.Receipt))
 
             payment_result.add_done_callback(functools.partial(send_payment, self=self))
 
