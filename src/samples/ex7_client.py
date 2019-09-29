@@ -155,7 +155,8 @@ class StudentClient(asyncio.Protocol):
 
         elif isinstance(packet, gc_packet_types.GameResponsePacket):
             text = packet.response
-            print("C :", text)
+            print("C: ", text)
+            print("C: ", packet.status)
             if packet.game_over():
                 print("C: GAME OVER - safe to terminate")
 
