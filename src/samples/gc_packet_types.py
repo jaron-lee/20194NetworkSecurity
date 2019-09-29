@@ -64,7 +64,7 @@ def process_game_response(pkt):
 
 def create_game_command(command):
 
-    pkt = GameCommandPacket(server_command=command)
+    pkt = GameCommandPacket(command=command)
 
     return pkt
 
