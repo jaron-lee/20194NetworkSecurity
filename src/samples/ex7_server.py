@@ -106,19 +106,21 @@ class StudentServer(asyncio.Protocol):
 
                 self.transport.close()
 
-        elif isinstance(packet, gc_packet_types.AutogradeTestStatus)
+        elif isinstance(packet, gc_packet_types.AutogradeTestStatus):
             print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
+        elif isinstance(packet, gc_packet_types.GameCommandPacket):
+            command = gc_packet_types.process_game_command(packet)
+            time.sleep(.2)
+            lines = command.split("<EOL>\n")
+            #if self.game.status == "playing":
+            for line in lines:
+                if len(line) > 0:
+                    print("S: ", line)
+                    assert self.verification, "S: payment not verified"
+                    self.game.command(line)
         else:
             raise ValueError(packet.DEFINITION_IDENTIFIER)
 
-        time.sleep(.2)
-        lines = text.split("<EOL>\n")
-        #if self.game.status == "playing":
-        for line in lines:
-            if len(line) > 0:
-                print("S: ", line)
-                assert self.verification, "S: payment not verified"
-                self.game.command(line)
 
 
 if __name__ == "__main__":
