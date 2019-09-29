@@ -122,12 +122,11 @@ class StudentClient(asyncio.Protocol):
         elif isinstance(packet, gc_packet_types.GameRequirePayPacket):
             unique_id, account, amount = gc_packet_types.process_game_require_pay_packet(packet)
 
-            payment_result = await transfer(
-                    bank_client=bank_client, 
+            payment_result = asyncio.ensure_future(transfer( bank_client=bank_client, 
                     src=SRC_ACCOUNT,
                     dst=account,
                     amount=amount,
-                    memo=unique_id)
+                    memo=unique_id))
             print("C: Paid {} to {}".format(amount, account))
 
             if payment_result:
