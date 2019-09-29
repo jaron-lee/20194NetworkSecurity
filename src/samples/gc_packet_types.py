@@ -6,6 +6,8 @@ from playground.network.packet import PacketType
 from playground.network.packet.fieldtypes import STRING, UINT8, BUFFER, BOOL
 from playground.network.packet.fieldtypes.attributes import Optional
 
+# TODO: enforce class typing
+
 def create_game_init_packet(username):
     """
     Creates packet for initiating game
@@ -19,7 +21,6 @@ def process_game_init(pkt):
     Returns username from game init packet
 
     """
-    print("blab")
     return pkt.username
 
 def create_game_require_pay_packet(unique_id, account, amount):
@@ -31,9 +32,10 @@ def create_game_require_pay_packet(unique_id, account, amount):
 
     return pkt
 
-
-
 def process_game_require_pay_packet(pkt):
+    """
+
+    """
 
     return pkt.unique_id, pkt.account, pkt.amount
 
