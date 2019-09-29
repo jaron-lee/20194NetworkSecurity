@@ -113,7 +113,9 @@ class StudentClient(asyncio.Protocol):
         if isinstance(packet, AutogradeTestStatus):
             print("C: {}".format(packet.test_id))
             print("C: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
+            if packet.error:
             
+                print("C: ERROR {}".format(packet.error))
 
             if packet.submit_status == AutogradeTestStatus.PASSED:
                 if packet.client_status != AutogradeTestStatus.PASSED:
@@ -145,7 +147,7 @@ class StudentClient(asyncio.Protocol):
 
                 self.transport.write(
                         pay_packet.__serialize__()
-                        )
+                )
                 print("C: Sending receipt {}".format(payment_result.Receipt))
 
             payment_result.add_done_callback(functools.partial(send_payment, self=self))
