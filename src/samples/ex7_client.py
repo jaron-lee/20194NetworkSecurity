@@ -132,7 +132,7 @@ class StudentClient(asyncio.Protocol):
                     amount=amount,
                     memo=unique_id))
             print("C: Paid {} to {}".format(amount, account))
-            done, pending = yield from asyncio.wait({payment_result})
+            done, pending = await asyncio.wait(payment_result)
 
 
             if payment_result in done:
