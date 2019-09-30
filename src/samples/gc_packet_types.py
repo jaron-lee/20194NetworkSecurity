@@ -21,6 +21,7 @@ def process_game_init(pkt):
     Returns username from game init packet
 
     """
+    assert isinstance(pkt, GameInitPacket)
     return pkt.username
 
 def create_game_require_pay_packet(unique_id, account, amount):
@@ -28,6 +29,7 @@ def create_game_require_pay_packet(unique_id, account, amount):
     Produces packet requesting particular amount from the bank
 
     """
+    
     pkt = GameRequirePayPacket(unique_id=unique_id, account=account, amount=amount)
 
     return pkt
@@ -36,6 +38,7 @@ def process_game_require_pay_packet(pkt):
     """
 
     """
+    assert isinstance(pkt, GameRequirePayPacket)
 
     return pkt.unique_id, pkt.account, pkt.amount
 
@@ -47,6 +50,7 @@ def create_game_pay_packet(receipt, receipt_signature):
 
 
 def process_game_pay_packet(pkt):
+    assert isinstance(pkt, GamePayPacket)
 
     return pkt.receipt, pkt.receipt_signature
 
@@ -58,6 +62,7 @@ def create_game_response(response, status):
     return pkt
 
 def process_game_response(pkt):
+    assert isinstance(pkt, GameResponsePacket)
 
     return pkt.response, pkt.status
 
@@ -69,6 +74,7 @@ def create_game_command(command):
     return pkt
 
 def process_game_command(pkt):
+    assert isinstance(pkt, GameCommandPacket)
 
     return pkt.command
 
