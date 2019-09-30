@@ -42,6 +42,7 @@ def write_function(string, transport, status):
             ).__serialize__()
         )
     print("Ss:", string)
+    print("Sss:", status)
 
 class StudentServer(asyncio.Protocol):
     def __init__(self):
