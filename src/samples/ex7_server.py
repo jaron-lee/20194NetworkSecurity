@@ -35,7 +35,7 @@ def verify(bank_client, receipt_bytes, signature_bytes, dst, amount, memo):
 
 def write_function(string, transport, status):
     transport.write(
-        create_game_response(
+        gc_packet_types.create_game_response(
             response = string,
             status=status
             ).__serialize__()
