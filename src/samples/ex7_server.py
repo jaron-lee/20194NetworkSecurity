@@ -83,7 +83,7 @@ class StudentServer(asyncio.Protocol):
 
             pay_packet = gc_packet_types.create_game_require_pay_packet(
                     unique_id="graphchess",
-                    account=SRC_ACCOUNT,
+                    account="jlee662_account",
                     amount=6
             )
 
@@ -99,9 +99,10 @@ class StudentServer(asyncio.Protocol):
                         bank_client=self.bank_client, 
                         receipt_bytes=receipt, 
                         signature_bytes=signature, 
-                        dst=SRC_ACCOUNT,
-                        amount=10, 
+                        dst="jlee662_account",
+                        amount=6, 
                         memo="graphchess")
+                self.verification = verification
             except Exception as e:
                 print(e)
                 self.transport.write(
@@ -112,18 +113,18 @@ class StudentServer(asyncio.Protocol):
 
                 self.transport.close()
 
-        elif isinstance(packet, gc_packet_types.AutogradeTestStatus):
+        elif isinstance(packet, AutogradeTestStatus):
             print("S: SUBMITRESPONSE {} {} {}".format(packet.submit_status, packet.client_status, packet.server_status))
         elif isinstance(packet, gc_packet_types.GameCommandPacket):
             command = gc_packet_types.process_game_command(packet)
             time.sleep(.2)
             lines = command.split("<EOL>\n")
             #if self.game.status == "playing":
-            for line in lines:
-                if len(line) > 0:
-                    print("S: ", line)
-                    assert self.verification, "S: payment not verified"
-                    self.game.command(line)
+            if self.verification:
+                for line in lines:
+                    if len(line) > 0:
+                        print("S: ", line)
+                        self.game.command(line)
 
         else:
             raise ValueError(packet.DEFINITION_IDENTIFIER)

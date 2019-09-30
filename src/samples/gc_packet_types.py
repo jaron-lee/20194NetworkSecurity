@@ -44,7 +44,9 @@ def process_game_require_pay_packet(pkt):
 
 def create_game_pay_packet(receipt, receipt_signature):
 
-    pkt = GamePayPacket(receipt=receipt, receipt_signature=receipt_signature)
+    pkt = GamePayPacket(
+            receipt=receipt, receipt_signature=receipt_signature
+            )
 
     return pkt
 
