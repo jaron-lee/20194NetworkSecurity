@@ -50,7 +50,7 @@ class StudentServer(asyncio.Protocol):
     def __init__(self):
         #username = "jlee662" # could override at the command line
         #password = getpass.getpass("Enter password for {}: ".format(username))
-        bank_client = BankClientProtocol(bank_cert, username="", password="") 
+        bank_client = BankClientProtocol(bank_cert, "", "") 
         self.bank_client = bank_client
         self.verification = False
 
