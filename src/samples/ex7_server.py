@@ -35,6 +35,8 @@ def verify(bank_client, receipt_bytes, signature_bytes, dst, amount, memo):
     return True
 
 def write_function(string, transport, status):
+    if string.startswith("VICTORY"):
+        status = "escaped"
     transport.write(
         gc_packet_types.create_game_response(
             response=string,
