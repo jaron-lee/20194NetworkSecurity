@@ -79,10 +79,13 @@ class StudentServer(asyncio.Protocol):
 
         if isinstance(packet, gc_packet_types.GameInitPacket):
             username = gc_packet_types.process_game_init(packet)
+            print("S: {} playing".format(username))
 
-            pay_packet = gc_packet_types.create_game_require_pay_packet(unique_id="graphchess",
+            pay_packet = gc_packet_types.create_game_require_pay_packet(
+                    unique_id="graphchess",
                     account=SRC_ACCOUNT,
-                    amount=10)
+                    amount=6
+            )
 
             self.transport.write(
                     pay_packet.__serialize__()
