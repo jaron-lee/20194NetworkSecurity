@@ -37,11 +37,11 @@ def verify(bank_client, receipt_bytes, signature_bytes, dst, amount, memo):
 def write_function(string, transport, status):
     transport.write(
         gc_packet_types.create_game_response(
-            response = string,
+            response=string,
             status=status
             ).__serialize__()
         )
-    print("S:", string)
+    print("Ss:", string)
 
 class StudentServer(asyncio.Protocol):
     def __init__(self):
@@ -76,7 +76,7 @@ class StudentServer(asyncio.Protocol):
             pay_packet = gc_packet_types.create_game_require_pay_packet(
                     unique_id="graphchess",
                     account="jlee662_account",
-                    amount=6
+                    amount=10
             )
 
             self.transport.write(
@@ -92,7 +92,7 @@ class StudentServer(asyncio.Protocol):
                         receipt_bytes=receipt, 
                         signature_bytes=signature, 
                         dst="jlee662_account",
-                        amount=6, 
+                        amount=10, 
                         memo="graphchess")
                 self.verification = verification
 
@@ -124,7 +124,7 @@ class StudentServer(asyncio.Protocol):
             if self.verification:
                 for line in lines:
                     if len(line) > 0:
-                        print("S: ", line)
+                        print("Sc: ", line)
                         self.game.command(line)
 
         else:
