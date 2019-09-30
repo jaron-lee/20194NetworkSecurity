@@ -101,8 +101,8 @@ class StudentServer(asyncio.Protocol):
 
                 # Start game if verification is good
                 game = EscapeRoomGame()
-                game.create_game()
                 game.output = functools.partial(write_function, transport=self.transport, status=game.status)
+                game.create_game()
                 game.start()
                 self.game = game
                 for a in game.agents:
