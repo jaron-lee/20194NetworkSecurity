@@ -56,14 +56,6 @@ class StudentServer(asyncio.Protocol):
         print("S: connection made")
         self.transport = transport
 
-        game = EscapeRoomGame()
-        game.output = functools.partial(write_function, transport=self.transport, status=game.status)
-        game.create_game()
-        game.start()
-        self.game = game
-        #asyncio.create_task(self.wait_agents())
-        for a in game.agents:
-            asyncio.ensure_future(a)
 
     def connection_lost(self, ex):
         print("S: closing transport")
@@ -103,6 +95,16 @@ class StudentServer(asyncio.Protocol):
                         amount=6, 
                         memo="graphchess")
                 self.verification = verification
+
+                # Start game if verification is good
+                game = EscapeRoomGame()
+                game.output = functools.partial(write_function, transport=self.transport, status=game.status)
+                game.create_game()
+                game.start()
+                self.game = game
+                for a in game.agents:
+                    asyncio.ensure_future(a)
+
             except Exception as e:
                 print(e)
                 self.transport.write(
@@ -119,7 +121,6 @@ class StudentServer(asyncio.Protocol):
             command = gc_packet_types.process_game_command(packet)
             time.sleep(.2)
             lines = command.split("<EOL>\n")
-            #if self.game.status == "playing":
             if self.verification:
                 for line in lines:
                     if len(line) > 0:
