@@ -33,7 +33,7 @@ def verify(bank_client, receipt_bytes, signature_bytes, dst, amount, memo):
         raise Exception("Invalid memo. Expected {} got {}".format(memo, ledger_line.memo()))
     return True
 
-def write_function(self, string, transport, status):
+def write_function(string, transport, status):
     transport.write(
         create_game_response(
             response = string,
