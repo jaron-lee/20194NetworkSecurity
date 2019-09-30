@@ -48,9 +48,9 @@ def write_function(string, transport, status):
 
 class StudentServer(asyncio.Protocol):
     def __init__(self):
-        username = "jlee662" # could override at the command line
-        password = getpass.getpass("Enter password for {}: ".format(username))
-        bank_client = BankClientProtocol(bank_cert, username, password) 
+        #username = "jlee662" # could override at the command line
+        #password = getpass.getpass("Enter password for {}: ".format(username))
+        bank_client = BankClientProtocol(bank_cert, username="", password="") 
         self.bank_client = bank_client
         self.verification = False
 
@@ -101,8 +101,8 @@ class StudentServer(asyncio.Protocol):
 
                 # Start game if verification is good
                 game = EscapeRoomGame()
-                game.output = functools.partial(write_function, transport=self.transport, status=game.status)
                 game.create_game()
+                game.output = functools.partial(write_function, transport=self.transport, status=game.status)
                 game.start()
                 self.game = game
                 for a in game.agents:
