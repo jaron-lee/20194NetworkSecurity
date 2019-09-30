@@ -87,6 +87,7 @@ class StudentServer(asyncio.Protocol):
             self.transport.write(
                     pay_packet.__serialize__()
             )
+            print("S: Pay packet request sent")
         elif isinstance(packet, gc_packet_types.GamePayPacket):
             receipt, signature = gc_packet_types.process_game_pay_packet(packet)
             print("S: {}".format(receipt))
