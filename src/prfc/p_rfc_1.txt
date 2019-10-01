@@ -3,7 +3,7 @@
 
 Network Working Group                                        J. Lee, Ed.
 Request for Comments: 1                   JHU Network Security Fall 2019
-Category: Standards Track                                 September 2019
+Category: Standards Track                                   October 2019
 
 
                     Playground Request For Comments
@@ -54,7 +54,7 @@ Copyright Notice
 
 Lee                          Standards Track                    [Page 1]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
 
 Table of Contents
@@ -110,7 +110,7 @@ Table of Contents
 
 Lee                          Standards Track                    [Page 2]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
 
 1.  Introduction
@@ -141,7 +141,7 @@ RFC 1                            PRFC's                   September 2019
    2.  The game server sends back a packet (GameRequirePayPacket) with a
        unique id, amount to pay, and account to pay into.
 
-   3.  The game client receives a reciept and receipt signature
+   3.  The game client receives a receipt and receipt signature
        indicating payment with the memo field set to the unique id.  It
        sends this as a packet (GamePayPacket) with receipt and receipt
        signature fields to the server
@@ -155,19 +155,21 @@ RFC 1                            PRFC's                   September 2019
 
 2.2.  Suggested Factory Functions
 
-   These functions are RECOMMENDED in the protocol definition, and users
-   SHOULD feel free to implement their own functions.  However, these
-   factory functions should serve as a useful guide for a set of
-   functions which create and process the game packets.  The type
-   annotations correspond to packet classes to be defined in the
-   following section, or Playground network packet field types.
+   These functions are RECOMMENDED but OPTIONAL in the protocol
+   definition.  Users should feel free to implement their own functions
+   for interacting with packets.  However, these factory functions
+   should serve as a useful guide for a set of functions which create
+   and process the game packets.  The type annotations correspond to
+   packet classes to be defined in the following section, or Playground
 
 
 
 Lee                          Standards Track                    [Page 3]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
+
+   network packet field types.
 
    1.   create_game_init_packet(username: STRING) -> GameInitPacket
 
@@ -218,11 +220,9 @@ RFC 1                            PRFC's                   September 2019
 
 
 
-
-
 Lee                          Standards Track                    [Page 4]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
 
                       class GameInitPacket(PacketType):
@@ -242,11 +242,10 @@ RFC 1                            PRFC's                   September 2019
                               ("unique_id", STRING),
                               ("account", STRING),
                               ("amount", UINT8)
-
                           ]
 
                       class GamePayPacket(PacketType):
-                      DEFINITION_IDENTIFIER = "paypacket"
+                          DEFINITION_IDENTIFIER = "paypacket"
                           DEFINITION_VERSION = "1.0"
 
                           FIELDS = [
@@ -262,8 +261,6 @@ RFC 1                            PRFC's                   September 2019
                               ("command", STRING)
                           ]
 
-
-
                       class GameResponsePacket(PacketType):
                           DEFINITION_IDENTIFIER = "responsepacket"
                           DEFINITION_VERSION = "1.0"
@@ -276,9 +273,12 @@ RFC 1                            PRFC's                   September 2019
 
 
 
+
+
+
 Lee                          Standards Track                    [Page 5]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
 
 4.  Normative References
@@ -334,7 +334,7 @@ Author's Address
 
 Lee                          Standards Track                    [Page 6]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
 
 Full Copyright Statement
@@ -390,7 +390,7 @@ Intellectual Property
 
 Lee                          Standards Track                    [Page 7]
 
-RFC 1                            PRFC's                   September 2019
+RFC 1                            PRFC's                     October 2019
 
 
    limitations associated with code donated to a PLAYGROUND experiment.
