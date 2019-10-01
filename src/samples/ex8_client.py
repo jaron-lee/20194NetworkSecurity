@@ -2,7 +2,7 @@ import asyncio
 import functools
 import playground
 import time
-from autograder_ex6_packets import AutogradeStartTest, AutogradeTestStatus
+from autograder_ex8_packets import AutogradeStartTest, AutogradeTestStatus
 from playground.network.packet import PacketType
 import gc_packet_types
 from CipherUtil import loadCertFromFile
@@ -89,11 +89,8 @@ class StudentClient(asyncio.Protocol):
                 name="Jaron Lee",
                 team=9,
                 email="jaron.lee@jhu.edu",
-                port=7826,
-                packet_file=b"123"
+                port=7826
                 )
-        #with open("gc_packet_types.py", "rb") as f:
-        #    start_packet.packet_file = f.read()
         self.transport.write(start_packet.__serialize__())
         print("C: Sent Autograde packet")
         #self.transport.write("Hello World".encode())
