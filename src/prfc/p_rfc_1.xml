@@ -81,9 +81,9 @@
          <country>USA</country>
        </postal>
 
-       <phone>+1 410-497-7384</phone>
 
-       <email>sethjn@cs.jhu.edu</email>
+       <phone></phone>
+       <email>jaron.lee@jhu.edu</email>
 
        <!-- uri and facsimile elements may also be added -->
      </address>
@@ -120,17 +120,13 @@
      <t>The PLAYGROUND (Poly-Localized Algorithmic Yields
      Generated Remotely On Unused Network Devices) system is
      designed to give students and researchers a sandbox in which to develop
-     network security experiments. For PLAYGROUND experiments
-     that involve a PETF (Playground Engineering Task Force),
-     PRFC's (Playground RFC's) are used in a manner similar
-     to RFC's. This PRFC specifices the format standards
-     for PRFC's.</t>
+     network security experiments. This PRFC specifies the protocol for exchange of information necessary to play the Escape Room Game over Playground.</t>
    </abstract>
  </front>
 
  <middle>
    <section title="Introduction">
-     <t>This document aims to provide a complete and unified protocol for interfacing with the Playground system. </t>
+     <t>This document aims to provide a complete and unified protocol for interfacing with the Playground system, for the purposes of playing the Escape Room Game. This document outlines the process of playing the game between the client and the server, and specifies factory functions and associated packet definitions for the payment and playing of the Escape Room Game.</t>
 
      <section title="Requirements Language">
        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -140,9 +136,9 @@
      </section>
    </section>
 
-   <section title="Requirements">
+   <section title="Outline of Interface">
        <section title="Game Protocol">
-           <t>The Playground game protocol should function in the following manner.</t>
+           <t>The Playground game protocol MUST function in the following manner.</t>
            <t><list style="numbers">
                    <t>The game client sends a packet (GameInitPacket) indicating a username and desire to play.</t>
                    <t>The game server sends back a packet (GameRequirePayPacket) with a unique id, amount to pay, and account to pay into. </t>
@@ -152,8 +148,8 @@
            </list></t>
 
        </section>
-       <section title="Required Functions">
-       <t>To that end, the proposed standard fulfills the following factory functions, with Python type annotations. The types correspond to packet classes to be defined in the following section, or Playground network packet field types. </t>
+       <section title="Suggested Factory Functions">
+       <t>These functions are RECOMMENDED in the protocol definition, and users SHOULD feel free to implement their own functions. However, these factory functions should serve as a useful guide for a set of functions which create and process the game packets. The type annotations correspond to packet classes to be defined in the following section, or Playground network packet field types. </t>
        <t><list style="numbers">
                <t>create_game_init_packet(username: STRING) -> GameInitPacket</t>
                <t>process_game_init(pkt: GameInitPacket) -> (username: STRING, )</t>
@@ -167,130 +163,72 @@
                <t>process_game_command(pkt: GameCommandPacket) -> (command: STRING)</t>
        </list></t>
        </section>
-       <section title="Packet Definitions">
-           <t>In this section we provide the packet definitions required as detailed by the above factory functions.</t>
-           <t>
+
+
+
+
+   </section>
+   
+   <section title="Packet Definitions">
+       <t>In this section we provide the REQUIRED packet definitions.</t>
+       <t>
            <figure>
                <artwork><![CDATA[
                    class GameInitPacket(PacketType):
-                   DEFINITION_IDENTIFIER = "initpacket"
-                   DEFINITION_VERSION = "1.0"
+                       DEFINITION_IDENTIFIER = "initpacket"
+                       DEFINITION_VERSION = "1.0"
 
-                   FIELDS = [
-                   ("username", STRING)
-                   ]
+                       FIELDS = [
+                           ("username", STRING)
+                       ]
 
 
                    class GameRequirePayPacket(PacketType):
-                   DEFINITION_IDENTIFIER = "requirepaypacket"
-                   DEFINITION_VERSION = "1.0"
+                       DEFINITION_IDENTIFIER = "requirepaypacket"
+                       DEFINITION_VERSION = "1.0"
 
-                   FIELDS = [
-                   ("unique_id", STRING),
-                   ("account", STRING),
-                   ("amount", UINT8)
+                       FIELDS = [
+                           ("unique_id", STRING),
+                           ("account", STRING),
+                           ("amount", UINT8)
 
-                   ]
+                       ]
 
                    class GamePayPacket(PacketType):
                    DEFINITION_IDENTIFIER = "paypacket"
-                   DEFINITION_VERSION = "1.0"
+                       DEFINITION_VERSION = "1.0"
 
-                   FIELDS = [
-                   ("receipt", BUFFER),
-                   ("receipt_signature", BUFFER)
-                   ]
+                       FIELDS = [
+                           ("receipt", BUFFER),
+                           ("receipt_signature", BUFFER)
+                       ]
 
                    class GameCommandPacket(PacketType):
-                   DEFINITION_IDENTIFIER = "commandpacket"
-                   DEFINITION_VERSION = "1.0"
+                       DEFINITION_IDENTIFIER = "commandpacket"
+                       DEFINITION_VERSION = "1.0"
 
-                   FIELDS = [
-                   ("command", STRING)
-                   ]
+                       FIELDS = [
+                           ("command", STRING)
+                       ]
 
 
 
                    class GameResponsePacket(PacketType):
-                   DEFINITION_IDENTIFIER = "responsepacket" 
-                   DEFINITION_VERSION = "1.0"
-
-
-                   FIELDS = [
-                   ("response", STRING),
-                   ("status", STRING),
-                   ]
-
-                       class PIMPPacket(PacketType):
-                       DEFINITION_IDENTIFIER = # Your packet name here
+                       DEFINITION_IDENTIFIER = "responsepacket" 
                        DEFINITION_VERSION = "1.0"
+
+
                        FIELDS = [
-                       # Your fields here
+                           ("response", STRING),
+                           ("status", STRING),
                        ]
-                       ]]>
-               </artwork>
-           </figure>
-           </t>
+
+                   ]]>
+           </artwork>
+       </figure>
+   </t>
        </section>
-
-
-
-
-   </section>
    
-   
-   <section title="PRFC Submission Process">
-   <t>PRFC's are required whenever PLAYGROUND groups need to interoperate. Some 
-   specifications will be mandated as part of PLAYGROUND development. Under these 
-   circumstances, the PETF will be responsible for approving the standards.</t>
-   
-   <t>In creating these mandated standards, the PETF can either draft the standards
-   and a reference implementation themselves or accept submissions from individual
-   groups. In either case, the final standard must be approved by a majority of the
-   PETF before the PRFC will be officially published.</t>
-   
-   <t>Any group can draft a standard that defines protocols and technologies that
-   are specific to their own PLAYGROUND nodes. Publishing PRFC's is the only acceptable
-   way for two groups to interact with each other. Thus, if a group wishes to make
-   their optional mechanisms available to other groups, they must create a PRFC 
-   publication. These PRFC's do not need the approval of the PETF if they are given
-   "experimental" status. Otherwise, a majority of the PETF must approve the standard
-   in order for it to be given "standards-track" status.</t>
-   
-   <t>PRFC's seeking "informational" status also do not require PETF approval.</t>
-   
-   <t>PRFC's seeking "best current practice" status do require PETF approval.</t>
-   </section>
-   
-   <section title="PRFC Revision Process">
-   <t>Once a PRFC is officially published by the PETF, it cannot be modified further
-   for any reason. A new PRFC must be submitted that identifies the errors and 
-   proposes to "update" or "supercede" the previous document.</t>
-   
-   <t>A PRFC MUST use the "update" reference if the changes do not result in an
-   incompatible protocol and the old protocol is not shown to be insecure. 
-   Changes to PRFC's that are "updates" include:</t>
-   
-   <t><list style="numbers">
-   	<t>Corrections to spelling, grammar, and other wording in the document</t>
-   	<t>Additional details about operations and operational considerations</t>
-   	<t>Additional parameters or interactions to the existing protocol</t>
-   </list></t>
-   
-   <t>A PRFC MUST use the "supercede" reference if the changes result in an incompatible
-   protocol OR if the previous protocol is demonstrated to be insecure.</t>
-   
-   <t>Approval from the PETF MUST be obtained if approval was required for the original
-   PRFC.</t>
-   
-   <t>A PRFC submitted without PETF approval MUST be revised only by the same PLAYGROUND
-   group that submitted the original.</t>
-   </section>
-   
-   <section title="Security Considerations">
-   <t>This specification is a documentation standard and not directly related
-   to the technical security of any protocol.</t>
-   </section>
  </middle>
 
  <!--  *****BACK MATTER ***** -->
