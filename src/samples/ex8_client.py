@@ -21,15 +21,6 @@ certPath = os.path.join(bankconfig.path(), "bank.cert")
 bank_cert = loadCertFromFile(certPath)
 SRC_ACCOUNT = "jlee662_account"
 
-def verify(bank_client, receipt_bytes, signature_bytes, dst, amount, memo):
-    if not bank_client.verify(receipt_bytes, signature_bytes):
-        raise Exception("Bad receipt. Not correctly signed by bank")
-    ledger_line = LedgerLineStorage.deserialize(receipt_bytes)
-    if ledger_line.getTransactionAmount(dst) != amount:
-        raise Exception("Invalid amount. Expected {} got {}".format(amount, ledger_line.getTransactionAmount(dst)))
-    elif ledger_line.memo(dst) != memo:
-        raise Exception("Invalid memo. Expected {} got {}".format(memo, ledger_line.memo()))
-    return True
 
 async def transfer(bank_client, src, dst, amount, memo):
     await playground.create_connection(
@@ -81,6 +72,8 @@ class StudentClient(asyncio.Protocol):
                             "unlock door with key",
                             "open door"]
 
+        self.paid = False # make sure we don't overpay 
+
     def connection_made(self, transport):
         self.transport = transport
         #d = PacketType.Deserializer()
@@ -126,29 +119,33 @@ class StudentClient(asyncio.Protocol):
             #if packet.submit_status != AutogradeTestStatus.PASSED:
             #    print(packet.error)
         elif isinstance(packet, gc_packet_types.GameRequirePayPacket):
-            unique_id, account, amount = gc_packet_types.process_game_require_pay_packet(packet)
+            if not self.paid:
+                unique_id, account, amount = gc_packet_types.process_game_require_pay_packet(packet)
 
-            payment_result = asyncio.ensure_future(transfer( 
-                bank_client=self.bank_client, 
-                src=SRC_ACCOUNT,
-                dst=account,
-                amount=amount,
-                memo=unique_id))
-            print("C: Paid {} to {}".format(amount, account))
-            def send_payment(payment_result, self):
-                payment_result = payment_result.result()
-                print("C: ", payment_result)
-                if payment_result:
-                    pay_packet = gc_packet_types.create_game_pay_packet(
-                            receipt=payment_result.Receipt,
-                            receipt_signature=payment_result.ReceiptSignature)
+                payment_result = asyncio.ensure_future(transfer( 
+                    bank_client=self.bank_client, 
+                    src=SRC_ACCOUNT,
+                    dst=account,
+                    amount=amount,
+                    memo=unique_id))
+                print("C: Paid {} to {}".format(amount, account))
+                def send_payment(payment_result, self):
+                    payment_result = payment_result.result()
+                    print("C: ", payment_result)
+                    if payment_result:
+                        pay_packet = gc_packet_types.create_game_pay_packet(
+                                receipt=payment_result.Receipt,
+                                receipt_signature=payment_result.ReceiptSignature)
 
-                    self.transport.write(
-                            pay_packet.__serialize__()
-                    )
-                    print("C: Sending receipt {}".format(payment_result.Receipt))
-
-            payment_result.add_done_callback(functools.partial(send_payment, self=self))
+                        self.transport.write(
+                                pay_packet.__serialize__()
+                        )
+                        print("C: Sending receipt {}".format(payment_result.Receipt))
+                try:
+                    payment_result.add_done_callback(functools.partial(send_payment, self=self))
+                    self.paid = True
+                except Exception as e:
+                    print("Payment failed: {}".format(e))
 
 
         elif isinstance(packet, gc_packet_types.GameResponsePacket):

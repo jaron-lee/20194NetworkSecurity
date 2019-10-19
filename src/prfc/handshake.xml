@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is modified by Seth Nielson for creating P-RFC's
+    (Playground-RFC's). -->
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml2rfc.ietf.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2360 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2360.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml2rfc.ietf.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+
+
+
+<rfc category="std" docName="rfc1" ipr="playgroundStd_v1_0" number="1">
+ <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902, playgroundWinter201501
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+ <!-- ***** FRONT MATTER ***** -->
+
+ <front>
+   <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+   <title abbrev="PRFC's"> POOP Request For Comments</title>
+
+   <!-- add 'role="editor"' below for the editors if appropriate -->
+
+   <!-- Another author who claims to be an editor -->
+
+   <author fullname="Jaron Lee" initials="J.L." role="editor"
+       surname="Lee">
+   <organization>JHU Network Security Fall 2019</organization>
+
+   <address>
+       <postal>
+           <street>JHU 160 Malone Hall/3400 North Charles St.</street>
+
+               <!-- Reorder these if your country does things differently -->
+
+           <city>Baltimore</city>
+
+           <region>MD</region>
+
+           <code>21218</code>
+
+           <country>USA</country>
+       </postal>
+
+
+       <phone></phone>
+       <email>jaron.lee@jhu.edu</email>
+
+           <!-- uri and facsimile elements may also be added -->
+   </address>
+   </author>
+
+   <author fullname="Max Li" initials="M.L." role="editor"
+           surname="Li">
+     <organization>JHU Network Security Fall 2019</organization>
+
+     <address>
+       <postal>
+         <street>JHU 160 Malone Hall/3400 North Charles St.</street>
+
+         <!-- Reorder these if your country does things differently -->
+
+         <city>Baltimore</city>
+
+         <region>MD</region>
+
+         <code>21218</code>
+
+         <country>USA</country>
+       </postal>
+
+
+       <phone></phone>
+       <email>zli122@jhu.edu</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+   </author>
+
+   <date year="2019" />
+
+   <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+   <!-- Meta-data Declarations -->
+
+   <area>General</area>
+
+   <workgroup>Playground Experiment Director</workgroup>
+
+   <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+   <keyword>POOP</keyword>
+
+   <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+   <abstract>
+     <t>The POOP (Playground Overlay Operating Protocol) system is
+     designed to give students and researchers a layout to implement a transport protocol. 
+     This PRFC specifies the protocol for exchange of information necessary to create a handshake over Playground.</t>
+   </abstract>
+ </front>
+
+ <middle>
+   <section title="Introduction">
+     <t>This document aims to provide a complete and unified protocol for interfacing with the Playground system, for the purposes of creating a handshake. This document outlines the process of creating a handshake between the client and the server, and specifies associated packet definitions for such purpose.</t>
+
+     <section title="Requirements Language">
+       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+       document are to be interpreted as described in <xref
+       target="RFC2119">RFC 2119</xref>.</t>
+     </section>
+   </section>
+
+   <section title="Outline of Interface">
+       <section title="Handshake Protocol">
+           <t>The Playground Handshake protocol MUST function in the following manner.</t>
+           <t><list style="numbers">
+                   <t>Agents are client and server. X and Y are random integers in the range [0, 2^32), where 2^32 is not included. HandshakePackets are a POOP Packet Type responsible for all handshake initiation activities between agents.</t>
+                   <t>The client needs to send a HandshakePacket with SYN set to a random value X and status NOT STARTED to the server to request a connection.</t>
+                   <t>Upon receiving the HandshakePacket, the server sends back a packet with ACK set to (X + 1) mod 2^32, SYN set to a random value Y and status SUCCESS.</t>
+                   <t>Upon receiving the HandshakePacket with status SUCCESS, the client checks if new ACK is (X + 1) mod 2^32. If it is correct, the client sends back to server a HandshakePacket with ACK set to (Y + 1) mod 2^32 (obtained from SYN of received packet), SYN set to (X + 1) mod 2^32, and status SUCCESS and acknowledge this connection with server. The connection is considered established on the client side. Else, the client sends back to server a HandshakePacket with status set to ERROR. </t>
+                   <t>The server should check that the ACK received is the correct value of (Y + 1) mod 2^32. If it is correct, then the connection is considered established on the server side, and full duplex is achieved. Else, the server should send a HandshakePacket to the client with status set to ERROR.</t>
+                   <t>If a packet other than HandshakePacket is received before an agent considers the connection established, that packet is ignored.</t>
+           </list></t>
+       </section>
+       <section title="Data Transfer">
+           <t><list style="numbers">
+               <t>Once handshake has been successfully initialized, all further data transfer should occur through  DataPacket, which is a POOP Packet Type containing a BUFFER data field. No further handshake packets should be sent.</t>
+               <t>For both the client and the server, set the initial sequence number to be SYN number of the last HandshakePacket received during the handshake protocol</t>
+               <t>Whenever a DataPacket is sent, the current sequence number X should be sent with the packet. Then, this sequence number should be incremented as (X + 1) mod 2^32.</t>
+               <t>If a packet other than DataPacket is received after an agent considers the connection established, that packet is ignored. </t>
+           </list></t>
+       </section>
+
+
+   </section>
+   
+   <section title="Packet Definitions">
+       <t>In this section we provide the REQUIRED packet definitions.</t>
+       <t>
+           <figure>
+               <artwork><![CDATA[
+
+                   class PoopPacketType(PacketType):
+                       DEFINITION_IDENTIFIER = "poop"
+                       DEFINITION_VERSION = "1.0"
+
+                   class DataPacket(PoopPacketType):
+                       DEFINITION_IDENTIFIER = "poop.datapacket"
+                       DEFINITION_VERSION = "1.0"
+                       
+                       FIELDS = [
+                           ("data", BUFFER),
+                           ("seq", UINT32)
+                       ]
+                   
+                   class HandshakePacket(PoopPacketType):
+                       DEFINITION_IDENTIFIER = "poop.handshakepacket"
+                       DEFINITION_VERSION = "1.0"
+                       
+                       NOT_STARTED = 0
+                       SUCCESS     = 1
+                       ERROR       = 2
+                       
+                       FIELDS = [
+                           ("SYN", UINT32({Optional:True})),
+                           ("ACK", UINT32({Optional:True})),
+                           ("status", UINT8),
+                           ("error", STRING({Optional: True}))
+                       ]
+
+
+                   
+                   ]]>
+           </artwork>
+       </figure>
+   </t>
+       </section>
+   
+ </middle>
+
+ <!--  *****BACK MATTER ***** -->
+
+ <back>
+   <!-- References split into informative and normative -->
+
+   <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+   <references title="Normative References">
+     <!--?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+     &RFC2119;
+     
+     &RFC2360;
+     
+   </references>
+
+
+   <!-- Change Log
+
+v00 2006-03-15  EBD   Initial version
+
+v01 2006-04-03  EBD   Moved PI location back to position 1 -
+                     v3.1 of XMLmind is better with them at this location.
+v02 2007-03-07  AH    removed extraneous nested_list attribute,
+                     other minor corrections
+v03 2007-03-09  EBD   Added comments on null IANA sections and fixed heading capitalization.
+                     Modified comments around figure to reflect non-implementation of
+                     figure indent control.  Put in reference using anchor="DOMINATION".
+                     Fixed up the date specification comments to reflect current truth.
+v04 2007-03-09 AH     Major changes: shortened discussion of PIs,
+                     added discussion of rfc include.
+v05 2007-03-10 EBD    Added preamble to C program example to tell about ABNF and alternative 
+                     images. Removed meta-characters from comments (causes problems).
+
+v06 2010-04-01 TT     Changed ipr attribute values to latest ones. Changed date to
+                     year only, to be consistent with the comments. Updated the 
+                     IANA guidelines reference from the I-D to the finished RFC.  
+                     
+SETH NIELSON:
+  Altered for PLAYGROUND AND PRFC's
+  2016-09-21 SJN PRFC 1
+
+  Updated for Fall 2017
+  2017-10-1
+  -->
+ </back>
+</rfc>
