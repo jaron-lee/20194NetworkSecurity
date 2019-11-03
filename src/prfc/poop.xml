@@ -119,6 +119,8 @@
                                             <t>Agents will communicate solely by
                                                 sending each other packets of
                                 the type DataPacket</t>
+                                            <t>The maximum size of any DataPacket shall be 15000 bytes.
+                                            </t>
 
                                             <t>The data field should be bytes
                                                 representing all or part of
@@ -144,8 +146,7 @@
 
                                             <t>All agents set the sequence
                                                 number on the first packet they
-                                                send to be the random integer in the range [0, 2^32) they generate in the process of starting the handshake.
-                                            </t>
+                                                send to be 0.                                            </t>
 
                                             <t>
                                 Sequence numbers will subsequently be assigned
@@ -277,39 +278,23 @@
                                         <t>
                                             <list style="numbers">
                                                 <t>The shutdown protocol is
-                                        identical to the handshake protocol</t>  
+                                        identical to the handshake protocol, with the exception of last_valid_sequence numbers.</t>  
 
-                                                <t>A HandshakePacket sent by an
-                                                agent after that agent has sent
-                                                and received acknowledgment of a
-                                                receipt of a HandshakePacket
-                                                with a "SUCCESS" status MUST be
-                                                interpretted as the
-                                                    initialization of the
-                                                    shutdown handshake
-                                                </t>
+                                        <t>The agent is told to shutdown upon receipt of a ShutdownPacket. The ShutdownPacket contains a last_valid_sequence attribute. This attribute represents the last sequence number that the agent should consider, when packets are arriving from other.                                                    </t>  
 
-                                                <t>Each agent should accept no
-                                                packets with sequence numbers
-                                                later than the last DataPacket
-                                                acknowledging receipt of a
-                                                HandshakePacket with a status
-                                                set to SUCCESS, indicating the
-                                                success of the shutdown handshake.
-                                             </t>
+                                                    <t> The agent similarly sends to the other agent a ShutdownPacket containing its own last_valid_sequence attribute, which is its current sequence number.
+
+                                                    </t>
 
                                              <t>Each agent must maintain the
                                              connection until it has received
-                                             acknowledgment that each unique
-                                             DataPacket it has sent has been
-                                             received, and until it has received
-                                             and acknowledged each DataPacket
-                                             with a sequence number smaller than
-                                             the last DataPacket it shall accept.
-                                             </t>
+                                                 acknowledgment for all sequence numbers of DataPackets up to and equal to the last_valid_sequence number of the other agent.
+                                         </t>
+                                         <t>
+                                             Once both agents have received all packets with sequence numbers up to and equal to the last_valid_sequence numbers of the other agents, the handshake is initiated (in the same fashion as described in the Handshake Protocol).
+                                     </t>
 
-                                             <t>When these conditions have been
-                                                met, the agents SHOULD close the
+                                             <t>When the handshake is successfully completed, only then should the agents SHOULD close the
                                                 connection between them.</t>
                                             </list>
                                         </t>

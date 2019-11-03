@@ -1,0 +1,504 @@
+
+
+
+Network Working Group                                        J. Lee, Ed.
+Request for Comments: 1                              N. Finkelstein, Ed.
+Category: Standards Track                                     M. Li, Ed.
+                                          JHU Network Security Fall 2019
+                                                            October 2019
+
+
+                       POOP Request For Comments
+
+Abstract
+
+   The POOP (Playground Overlay Operating Protocol) system is designed
+   to give students and researchers a layout to implement a transport
+   protocol.  This PRFC specifies the protocol for exchange of
+   information necessary to create a handshake over Playground.
+
+Status of this Memo
+
+   This document specifies a Playgrounds standards track protocol for
+   the Playground Experiment, and requests discussion and suggestions
+   for improvements.  Distribution of this memo is unlimited.
+
+Copyright Notice
+
+   Copyright (c) 2019 SETH JAMES NIELSON.  All rights reserved.
+
+   This document is used solely for educational purposes.  Any citations
+   within this document are also for educational purposes and also for
+   technical reference.  If any of these cited elements are protected
+   under copyright, their inclusion here falls under Fair Use
+   provisions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lee, et al.                  Standards Track                    [Page 1]
+
+RFC 1                            PRFC's                     October 2019
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . . . 3
+   2.  Outline of Interface  . . . . . . . . . . . . . . . . . . . . . 3
+     2.1.  Data Transfer . . . . . . . . . . . . . . . . . . . . . . . 3
+     2.2.  Handshake Protocol  . . . . . . . . . . . . . . . . . . . . 4
+     2.3.  Shutdown Protocol . . . . . . . . . . . . . . . . . . . . . 5
+   3.  Packet Definitions  . . . . . . . . . . . . . . . . . . . . . . 6
+   4.  Normative References  . . . . . . . . . . . . . . . . . . . . . 6
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 7
+   Intellectual Property and Copyright Statements  . . . . . . . . . . 8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lee, et al.                  Standards Track                    [Page 2]
+
+RFC 1                            PRFC's                     October 2019
+
+
+1.  Introduction
+
+   This document aims to provide a complete and unified protocol for
+   interfacing with the Playground system, for the purposes of creating
+   a handshake.  This document outlines the process of creating a
+   handshake between the client and the server, and specifies associated
+   packet definitions for such purpose.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+2.  Outline of Interface
+
+   Agents are client and server.
+
+2.1.  Data Transfer
+
+   1.   Agents will communicate solely by sending each other packets of
+        the type DataPacket
+
+   2.   The maximum size of any DataPacket shall be 15000 bytes.
+
+   3.   The data field should be bytes representing all or part of
+        another packet.
+
+   4.   Multiple DataPacket packets with data fields that are identical
+        to the data fields of previously sent DataPacket packets may be
+        sent.
+
+   5.   No bytes representing full or partial packets may be sent other
+        than as part of a data field that is identical to the one in
+        which they were originally sent.
+
+   6.   All agents set the sequence number on the first packet they send
+        to be 0.
+
+   7.   Sequence numbers will subsequently be assigned according to the
+        following rules.  If the data contained in the DataPacket has
+        not yet been sent, the sequence number should be 1 greater than
+        the greatest sequence number previously sent, mod 2^32.  If the
+        data contained in the DataPacket has already been sent
+        previously, and is being resent, the sequence number should be
+        set to the sequence number of the DataPacket used to send the
+        data the first time it was sent.
+
+
+
+Lee, et al.                  Standards Track                    [Page 3]
+
+RFC 1                            PRFC's                     October 2019
+
+
+   8.   The hash field should be a hash of a serialized DataPacket with
+        the data, seq, and ACK all set to their ultimate values, and
+        hash set to 0.  Our has is computed as follows:
+        'binascii.crc32(serialized_packet) & 0xffffffff'
+
+   9.   Once an agent receives a DataPacket packet, and has confirmed
+        that the hash matches the data, it must send back a DataPacket
+        with an empty data field, and ACK set to the sequence number of
+        the packet it received
+
+   10.  Only one of "ACK" and "data" must be set.  If "ACK" is set,
+        "data" will be ignored, and if "data" is set, "ACK" will be
+        ignored
+
+   11.  Once an agent receives confirmation of receipt of a DataPacket
+        packet it sent, it can assume that the other agent has received
+        the data contained therein
+
+   12.  Each agent shall be considered responsible for every packet it
+        has acknowledge receipt of at any point
+
+2.2.  Handshake Protocol
+
+   The Playground Handshake protocol MUST function in the following
+   manner.  The handshake will be communicated according to the Data
+   Transfer protocol.  The agent that sends the initial packet will be
+   referred to as the "initiating agent", and the agent receiving the
+   first packet will be referred to as the "receiving agent".
+
+   1.  X and Y are random integers in the range [0, 2^32), where 2^32 is
+       not included.  HandshakePackets are a POOP Packet Type
+       responsible for all handshake initiation activities between
+       agents.
+
+   2.  The initiating agent needs to send a HandshakePacket with SYN set
+       to a random value X and status NOT STARTED to the other agent to
+       request a connection.
+
+   3.  Upon receiving the HandshakePacket, the receiving agent sends
+       back a packet with ACK set to (X + 1) mod 2^32, SYN set to a
+       random value Y and status SUCCESS.
+
+   4.  Upon receiving the HandshakePacket with status SUCCESS, the
+       initiating agent checks if new ACK is (X + 1) mod 2^32.  If it is
+       correct, the initiating agent sends back to receiving agent a
+       HandshakePacket with ACK set to (Y + 1) mod 2^32 (obtained from
+       SYN of received packet), SYN set to (X + 1) mod 2^32, and status
+       SUCCESS and acknowledge this connection with server.  The
+
+
+
+Lee, et al.                  Standards Track                    [Page 4]
+
+RFC 1                            PRFC's                     October 2019
+
+
+       connection is considered established on the initiating side.
+       Else, the initiating agent sends back to server a HandshakePacket
+       with status set to ERROR.
+
+   5.  The server should check that the ACK received is the correct
+       value of (Y + 1) mod 2^32.  If it is correct, then the connection
+       is considered established on the server side, and full duplex is
+       achieved.  Else, the server should send a HandshakePacket to the
+       initiating agent with status set to ERROR.
+
+   6.  Packets of a type other than HandShake packet should not be sent
+       beyond the handshake layer until the handshake has been
+       completed.
+
+2.3.  Shutdown Protocol
+
+   The Playground shutdown protocol MUST function in the following
+   manner.  The shutdown will be communicated according to the Data
+   Transfer protocol
+
+   1.  The shutdown protocol is identical to the handshake protocol,
+       with the exception of last_valid_sequence numbers.
+
+   2.  The agent is told to shutdown upon receipt of a ShutdownPacket.
+       The ShutdownPacket contains a last_valid_sequence attribute.
+       This attribute represents the last sequence number that the agent
+       should consider, when packets are arriving from other.
+
+   3.  The agent similarly sends to the other agent a ShutdownPacket
+       containing its own last_valid_sequence attribute, which is its
+       current sequence number.
+
+   4.  Each agent must maintain the connection until it has received
+       acknowledgment for all sequence numbers of DataPackets up to and
+       equal to the last_valid_sequence number of the other agent.
+
+   5.  Once both agents have received all packets with sequence numbers
+       up to and equal to the last_valid_sequence numbers of the other
+       agents, the handshake is initiated (in the same fashion as
+       described in the Handshake Protocol).
+
+   6.  When the handshake is successfully completed, only then should
+       the agents SHOULD close the connection between them.
+
+
+
+
+
+
+
+
+Lee, et al.                  Standards Track                    [Page 5]
+
+RFC 1                            PRFC's                     October 2019
+
+
+3.  Packet Definitions
+
+   In this section we provide the REQUIRED packet definitions.
+
+
+
+
+                      class PoopPacketType(PacketType):
+                          DEFINITION_IDENTIFIER = "poop"
+                          DEFINITION_VERSION = "1.0"
+
+                      class DataPacket(PoopPacketType):
+                          DEFINITION_IDENTIFIER = "poop.datapacket"
+                          DEFINITION_VERSION = "1.0"
+
+                          FIELDS = [
+                              ("data", BUFFER({Optional:True})),
+                              ("seq", UINT32),
+                              ("ACK", UINT32({Optional:True})),
+                              ("hash", UINT32),
+                          ]
+
+                      class HandshakePacket(PoopPacketType):
+                          DEFINITION_IDENTIFIER = "poop.handshakepacket"
+                          DEFINITION_VERSION = "1.0"
+
+                          NOT_STARTED = 0
+                          SUCCESS     = 1
+                          ERROR       = 2
+
+                          FIELDS = [
+                              ("SYN", UINT32({Optional:True})),
+                              ("ACK", UINT32({Optional:True})),
+                              ("status", UINT8),
+                              ("error", STRING({Optional: True})),
+                          ]
+
+
+
+
+4.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
+              RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC2360]  Scott, G., "Guide for Internet Standards Writers", BCP 22,
+
+
+
+Lee, et al.                  Standards Track                    [Page 6]
+
+RFC 1                            PRFC's                     October 2019
+
+
+              RFC 2360, DOI 10.17487/RFC2360, June 1998,
+              <https://www.rfc-editor.org/info/rfc2360>.
+
+
+Authors' Addresses
+
+   Jaron Lee (editor)
+   JHU Network Security Fall 2019
+   JHU 160 Malone Hall/3400 North Charles St.
+   Baltimore, MD  21218
+   USA
+
+   Phone:
+   Email: jaron.lee@jhu.edu
+
+
+   Noam Finkelstein (editor)
+   JHU Network Security Fall 2019
+   JHU 160 Malone Hall/3400 North Charles St.
+   Baltimore, MD  21218
+   USA
+
+   Phone:
+   Email: zli122@jhu.edu
+
+
+   Max Li (editor)
+   JHU Network Security Fall 2019
+   JHU 160 Malone Hall/3400 North Charles St.
+   Baltimore, MD  21218
+   USA
+
+   Phone:
+   Email: zli122@jhu.edu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lee, et al.                  Standards Track                    [Page 7]
+
+RFC 1                            PRFC's                     October 2019
+
+
+Full Copyright Statement
+
+   Copyright (C) Seth James Nielson (2019).  All Rights Reserved.
+
+   This document and translations of it may be copied and furnished to
+   others, and derivative works that comment on or otherwise explain it
+   or assist in its implementation may be prepared, copied, published
+   and distributed, in whole or in part, without restriction of any
+   kind, provided that the above copyright notice and this paragraph are
+   included on all such copies and derivative works.  However, this
+   document itself may not be modified in any way, such as by removing
+   the copyright notice or references to the PLAYGROUND experiment or
+   other associated organizations, except by explicit permission.
+
+   The limited permissions granted above are perpetual and will not be
+   revoked by SETH JAMES NIELSON or his successors or assigns.
+
+   This document and the information contained herein is provided on an
+   "AS IS" basis and SETH JAMES NIELSON and associated academic
+   institutions DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+   BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+   HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
+   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Intellectual Property
+
+   The PLAYGROUND framework and student submissions for PLAYGROUND are
+   intended to be free of any intellectual property conflicts.  All
+   submitting parties, especially students, are not allowed to submit
+   source code, specifications, or other components that are known to be
+   protected by copyright, patents, or other IP mechanisms.  Students
+   submitting creative content grant shared rights and ownership of
+   their content to the PLAYGROUND project.  Specifically, any
+   submission can be used in future educational settings including
+   subsequent PLAYGROUND experiments.
+
+   Any interested party is invited to bring to the experiment director's
+   attention any copyrights, patents or patent applications, or other
+   proprietary rights which may cover technology that may be currently
+   in use without permission.
+
+   It should be noted that these statements have not been reviewed by
+   legal counsel.  Moreover, the academic institutions at which
+   PLAYGROUND experiments take place may have additional or even
+   conflicting copyright and intellectual property rules.  Accordingly,
+   concerned parties may need to contact their own lawyer and/or
+   resources at their institution to understand the rights and
+
+
+
+Lee, et al.                  Standards Track                    [Page 8]
+
+RFC 1                            PRFC's                     October 2019
+
+
+   limitations associated with code donated to a PLAYGROUND experiment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lee, et al.                  Standards Track                    [Page 9]
+
